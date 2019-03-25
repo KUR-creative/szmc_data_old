@@ -36,36 +36,33 @@ def path_chunk2flist_file(chunk, file_name):
 tags2tag_names = partial(lmap, lambda dic: dic['name'])
 has_tag = lambda t: lambda j: t in tags2tag_names(j['tags'])
 id2imgname = lambda id: '/%04d/%d' % (id % 1000, id)
+def id_ext2imgname(id_ext):
+    id,ext = id_ext
+    return '/%04d/%d.%s\n' % (id % 1000, id, ext)
 #name2imgpath_tup = lambda name: name
 #id2imgname = lambda id: str(id)
 
 def main():
-    jsons2absurdres_mono_ids = rcompose(
+    jsons2id_ext_seq = rcompose(
         partial(mapcat, jsonpath2lines),
         partial(map, json.loads),
         partial(filter, has_tag('absurdres')),
         partial(filter, has_tag('monochrome')), # and
-        partial(map, lambda j: int(j['id']))
+        partial(map, lambda j: (int(j['id']), j['file_ext']) )
     )
 
-    '''
-    json_paths = ['./2017/2017000000000000.json',
-                  './2018/2018000000000000']
-    '''
     jsons2017 = file_paths('./2017')
     jsons2018 = file_paths('./2018')
     json_paths = concat(jsons2017, jsons2018)
-    ids = jsons2absurdres_mono_ids(json_paths)
+    #json_paths = ['./2017/2017000000000000.json', './2017/2017000000000001.json']
+    id_ext_seq = jsons2id_ext_seq(json_paths)
 
-    ids2imgpath_chunks = rcompose(
-        partial(map, id2imgname),
-        partial(map, lambda n: (n+'.png', n+'.jpg')),
-        flatten,
-        partial(map, lambda s: s+'\n'),
-        partial(chunks, 10000),
-    )
+    imgpaths = tqdm(map(id_ext2imgname, id_ext_seq), total=35000)
+    path_chunk2flist_file(imgpaths, 'imgpaths.txt')
+    '''
     for i,chunk in enumerate(ids2imgpath_chunks(ids)):
         path_chunk2flist_file(chunk, str(i)+'.txt')
+    '''
 
     #ids -> imgnames -> imgpaths  -> chunk 8 -> write 8 file
 
