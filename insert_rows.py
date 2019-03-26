@@ -42,8 +42,6 @@ def insert2db(db_path, path_json_seq):
         assert len(schema_tup) == len(values_tup)
         schema = ','.join(schema_tup)
         values = ','.join([sql_val(n) for n in values_tup])
-        #values = tuple(values_tup)
-        #values = ','.join([str(n) for n in values_tup])
         return \
             'INSERT INTO {} ({}) VALUES ({})'.format(
                 table, schema, values
@@ -76,16 +74,6 @@ def insert2db(db_path, path_json_seq):
             db.execute(tap( metadata_sql(
                 j['id'], **sql_dict(tag_names( j['tags'] ))
             )))
-            '''
-            print( data_sql(j['id']) )
-            print( image_sql(
-                j['id'], path, j['file_ext'], j['file_size'],
-                j['image_height'], j['image_width']
-            ))
-            print( metadata_sql(
-                j['id'], **sql_dict(tap(tag_names( j['tags'] )))
-            ))
-            '''
         db.commit()
 
 def main():

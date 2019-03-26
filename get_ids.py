@@ -6,11 +6,6 @@ from pprint import pprint
 from funcy import concat, map, filter, mapcat, partial, rcompose, lmap, tap, ignore
 from funcy import flatten, rpartial, chunks
 import unittest
-
-#import sys, codecs
-#sys.stdout = codecs.getwriter('utf8')(sys.stdout)
-#sys.stderr = codecs.getwriter('utf8')(sys.stderr)
-
 import os, re
 def file_paths(root_dir_path):
     ''' generate file_paths of directory_path ''' 
@@ -39,8 +34,6 @@ id2imgname = lambda id: '/%04d/%d' % (id % 1000, id)
 def id_ext2imgname(id_ext):
     id,ext = id_ext
     return '/%04d/%d.%s\n' % (id % 1000, id, ext)
-#name2imgpath_tup = lambda name: name
-#id2imgname = lambda id: str(id)
 
 def main():
     jsons2id_ext_seq = rcompose(
@@ -59,18 +52,8 @@ def main():
 
     imgpaths = tqdm(map(id_ext2imgname, id_ext_seq), total=35000)
     path_chunk2flist_file(imgpaths, 'imgpaths.txt')
-    '''
-    for i,chunk in enumerate(ids2imgpath_chunks(ids)):
-        path_chunk2flist_file(chunk, str(i)+'.txt')
-    '''
-
-    #ids -> imgnames -> imgpaths  -> chunk 8 -> write 8 file
 
 
-# -> make files.txt
-# -> 10 000 -> /0000/10000.png /0000/10000.jpg  
-'''
-'''
 class Test(unittest.TestCase):
     def setUp(self):
         self.t_list = [
@@ -102,10 +85,7 @@ class Test(unittest.TestCase):
         self.assertEqual(id2imgname(1231001), '/0001/1231001')
         self.assertEqual(id2imgname(7897321), '/0321/7897321')
 
-    #def test_name2imgpath_tup(self):
-        #self.assertEqual(name2imgpath_tup(1000), '/0000/1000')
 
 if __name__ == '__main__':
     main()
     #unittest.main()
-

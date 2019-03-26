@@ -12,7 +12,6 @@ def extension(path):
     return filename_ext(path).ext
 
 from funcy import rcompose, mapcat, tap, partial, map, concat, filter
-# id files -> ids
 import os
 def file_paths(root_dir_path):
     ''' generate file_paths of directory_path ''' 
