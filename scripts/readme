@@ -1,0 +1,8 @@
+HOW TO USE
+
+mv some_script.py ..
+cd ..
+python some_script.py
+mv some_script.py ./scripts/
+
+Or.. follow header comment of some_script.py
