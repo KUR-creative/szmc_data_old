@@ -2,7 +2,7 @@
 from access_db import img_pathseq
 
 import sys
-import PyQt5.QtCore
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QApplication, QWidget, 
     QMainWindow, QAction, QFileDialog, 
@@ -12,11 +12,48 @@ from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QIcon, QPixmap, QImage
 
 class MainWindow(QMainWindow):
+    resized = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.init_ui()
         #self.show()
+
         self.showMaximized()
+
+        self.resized.connect(self.someFunction)
+
+    def resizeEvent(self, event):
+        self.resized.emit()
+        return super(type(self), self).resizeEvent(event)
+    def someFunction(self):
+        print("someFunction")
+ 
+        ih = self.img_viewer.height()
+        iw = self.img_viewer.width()
+        print('img viewer',ih,iw)
+
+        h = self.img_label.height()
+        w = self.img_label.width()
+        print('img label',h,w)
+
+        pixmap = QPixmap('./2706002.jpg')
+        h = pixmap.height()
+        w = pixmap.width()
+        print('pixmap',h,w)
+        #self.img_label.setPixmap(pixmap)
+        smaller = pixmap.scaled(iw, h, QtCore.Qt.KeepAspectRatio)
+        #smaller = pixmap.scaled(iw, ih, QtCore.Qt.KeepAspectRatio)
+        self.img_label.setPixmap(smaller)
+        self.img_label.adjustSize()
+
+        h = smaller.height()
+        w = smaller.width()
+        print('smaller pixmap',h,w)
+
+        h = self.img_label.height()
+        w = self.img_label.width()
+        print('img label after adjust size',h,w)
+        #self.img_label.setPixmap(pixmap.scaled(w,h,QtCore.Qt.KeepAspectRatio))
 
     def init_ui(self):
         #self.setGeometry(200, 200, 850, 750)
@@ -24,19 +61,14 @@ class MainWindow(QMainWindow):
         #self.statusBar().showMessage('Ready')
         self.init_main_widget()
 
-        h = self.main_widget.height()
-        w = self.main_widget.width()
-        print('main_widget',h,w)
-
 
     def init_main_widget(self):
-        pixmap = QPixmap('./2706002.jpg')
+        #pixmap = QPixmap('./2706002.jpg')
 
         self.img_label = QLabel()
-        h = self.img_label.height()
-        w = self.img_label.width()
-        print(h,w)
-        self.img_label.setPixmap(pixmap.scaled(w,h,PyQt5.QtCore.Qt.KeepAspectRatio))
+        #self.img_label.setPixmap(pixmap.scaled(w,h,PyQt5.QtCore.Qt.KeepAspectRatio))
+        #pixmap = QPixmap('./2706002.jpg')
+        #self.img_label.setPixmap(pixmap)
         self.img_label.setScaledContents(True)
         self.img_viewer = QScrollArea() 
         h = self.img_label.height()
@@ -59,10 +91,6 @@ class MainWindow(QMainWindow):
         self.main_widget = QWidget()
         self.main_widget.setLayout(hbox)
         self.setCentralWidget(self.main_widget)
-
-        h = self.main_widget.height()
-        w = self.main_widget.width()
-        print('main_widget',h,w)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
