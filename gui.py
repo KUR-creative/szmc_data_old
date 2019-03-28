@@ -92,6 +92,17 @@ class MainWindow(QMainWindow):
         self.main_widget.setLayout(hbox)
         self.setCentralWidget(self.main_widget)
 
+        def keyPressEvent(e):
+            if e.key() == QtCore.Qt.Key_Up:
+                print('up')
+            elif e.key() == QtCore.Qt.Key_Down:
+                print('down')
+            elif e.key() == QtCore.Qt.Key_Left:
+                print('left')
+            elif e.key() == QtCore.Qt.Key_Right:
+                print('right')
+        self.img_viewer.keyPressEvent = keyPressEvent
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MainWindow()
