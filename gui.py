@@ -93,9 +93,16 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         def keyPressEvent(e):
+            ih = self.img_viewer.height()
             if e.key() == QtCore.Qt.Key_Up:
+                y = self.img_viewer.verticalScrollBar().value()
+                print('y',self.img_viewer.verticalScrollBar().value())
                 print('up')
+                self.img_viewer.verticalScrollBar().setValue(y - ih)
             elif e.key() == QtCore.Qt.Key_Down:
+                y = self.img_viewer.verticalScrollBar().value()
+                self.img_viewer.verticalScrollBar().setValue(y + ih)
+                print('y',self.img_viewer.verticalScrollBar().value())
                 print('down')
             elif e.key() == QtCore.Qt.Key_Left:
                 print('left')
