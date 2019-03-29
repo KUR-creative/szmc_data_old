@@ -30,8 +30,8 @@ class MainWindow(QMainWindow):
         viewer_h = self.img_viewer.height()
         #print('img viewer',viewer_w,viewer_h)
 
-        #pixmap = QPixmap('./2706002.jpg')
-        pixmap = QPixmap('./670984.gif')
+        pixmap = QPixmap('./2706002.jpg')
+        #pixmap = QPixmap('./670984.gif')
         origin_w = pixmap.width()
         origin_h = pixmap.height()
         #print('pixmap',origin_h,origin_w)
@@ -51,12 +51,7 @@ class MainWindow(QMainWindow):
 
 
     def init_main_widget(self):
-        #pixmap = QPixmap('./2706002.jpg')
-
         self.img_label = QLabel()
-        #self.img_label.setPixmap(pixmap.scaled(w,h,PyQt5.QtCore.Qt.KeepAspectRatio))
-        #pixmap = QPixmap('./2706002.jpg')
-        #self.img_label.setPixmap(pixmap)
         self.img_label.setScaledContents(True)
         self.img_viewer = QScrollArea() 
         h = self.img_label.height()
@@ -81,21 +76,26 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         def keyPressEvent(e):
-            ih = self.img_viewer.height()
+            #https://doc.qt.io/qt-5.9/qt.html#Key-enum
+            # o a h n ? !
+            viewer_h = self.img_viewer.height()
             if e.key() == QtCore.Qt.Key_Up:
                 y = self.img_viewer.verticalScrollBar().value()
                 print('y',self.img_viewer.verticalScrollBar().value())
                 print('up')
-                self.img_viewer.verticalScrollBar().setValue(y - ih)
+                self.img_viewer.verticalScrollBar().setValue(y - viewer_h)
             elif e.key() == QtCore.Qt.Key_Down:
                 y = self.img_viewer.verticalScrollBar().value()
-                self.img_viewer.verticalScrollBar().setValue(y + ih)
+                self.img_viewer.verticalScrollBar().setValue(y + viewer_h)
                 print('y',self.img_viewer.verticalScrollBar().value())
                 print('down')
             elif e.key() == QtCore.Qt.Key_Left:
                 print('left')
             elif e.key() == QtCore.Qt.Key_Right:
                 print('right')
+            elif e.key() == QtCore.Qt.Key_F:
+                self.display_full = (not self.display_full)
+                self.change_img_size()
         self.img_viewer.keyPressEvent = keyPressEvent
 
 if __name__ == '__main__':
