@@ -50,8 +50,6 @@ class MainWindow(QMainWindow):
         self.img_label.adjustSize()
 
     def init_ui(self):
-        #self.setGeometry(200, 200, 850, 750)
-        #self.setWindowTitle('Sick Zil Machine  ver 0.0.0')    
         #self.statusBar().showMessage('Ready')
         self.init_main_widget()
 
@@ -60,20 +58,16 @@ class MainWindow(QMainWindow):
         self.img_label = QLabel()
         self.img_label.setScaledContents(True)
         self.img_viewer = QScrollArea() 
-        h = self.img_label.height()
-        w = self.img_label.width()
-        print(h,w)
-        #TODO: 이미지 확대/추가, 마우스 휠 눌러서 옮기기 구현하기.      
         self.img_viewer.setWidget(self.img_label)
 
         self.choice_viwer = QLabel()
         self.choice_viwer.setStyleSheet('font:70pt;')
-        self.choice_viwer.setText('T')
+        self.choice_viwer.setText('_')
         self.choice_viwer.resize(200,100)
 
         self.choice_viwer.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Ignored)
 
-        hbox = QHBoxLayout()#Horizontal, 수평으로 배치.
+        hbox = QHBoxLayout()
         hbox.addWidget(self.img_viewer)
         hbox.addWidget(self.choice_viwer)
 
@@ -82,6 +76,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         def keyPressEvent(e):
+            #TODO: refactor with dict, eval, ...
             #https://doc.qt.io/qt-5.9/qt.html#Key-enum
             # o a h n ? !
             # 0 1 2 3
