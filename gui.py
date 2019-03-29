@@ -30,7 +30,8 @@ class MainWindow(QMainWindow):
         viewer_h = self.img_viewer.height()
         #print('img viewer',viewer_w,viewer_h)
 
-        pixmap = QPixmap('./2706002.jpg')
+        #pixmap = QPixmap('./2706002.jpg')
+        pixmap = QPixmap('./670984.gif')
         origin_w = pixmap.width()
         origin_h = pixmap.height()
         #print('pixmap',origin_h,origin_w)
