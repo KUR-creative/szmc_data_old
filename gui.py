@@ -11,12 +11,15 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QIcon, QPixmap, QImage
 
+FULL = 0
+ORIGIN_H = 1
+ORIGIN_W = 2
 class MainWindow(QMainWindow):
     resize_signal = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.init_ui()
-        self.display_full = True
+        self.display_full = FULL
 
         self.showMaximized()
         self.resize_signal.connect(self.change_img_size)
@@ -30,15 +33,18 @@ class MainWindow(QMainWindow):
         viewer_h = self.img_viewer.height()
         #print('img viewer',viewer_w,viewer_h)
 
+        pixmap = QPixmap('./big.jpg')
         pixmap = QPixmap('./2706002.jpg')
         #pixmap = QPixmap('./670984.gif')
         origin_w = pixmap.width()
         origin_h = pixmap.height()
         #print('pixmap',origin_h,origin_w)
 
-        if self.display_full:
+        if self.display_full == FULL:
             smaller = pixmap.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
-        else:
+        elif self.display_full == ORIGIN_W:
+            smaller = pixmap.scaled(origin_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+        elif self.display_full == ORIGIN_H:
             smaller = pixmap.scaled(viewer_w, origin_h, QtCore.Qt.KeepAspectRatio)
         self.img_label.setPixmap(smaller)
         self.img_label.adjustSize()
@@ -79,20 +85,25 @@ class MainWindow(QMainWindow):
             #https://doc.qt.io/qt-5.9/qt.html#Key-enum
             # o a h n ? !
             viewer_h = self.img_viewer.height()
-            if e.key() == QtCore.Qt.Key_Up:
+            viewer_w = self.img_viewer.width()
+            if (e.key() == QtCore.Qt.Key_Up or
+                e.key() == QtCore.Qt.Key_J):
                 y = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.verticalScrollBar().setValue(y - viewer_h)
-            elif e.key() == QtCore.Qt.Key_Down:
+            elif (e.key() == QtCore.Qt.Key_Down or
+                  e.key() == QtCore.Qt.Key_K):
                 y = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.verticalScrollBar().setValue(y + viewer_h)
 
             elif e.key() == QtCore.Qt.Key_Left:
-                print('left')
+                x = self.img_viewer.verticalScrollBar().value()
+                self.img_viewer.horizontalScrollBar().setValue(x - viewer_w)
             elif e.key() == QtCore.Qt.Key_Right:
-                print('right')
+                x = self.img_viewer.verticalScrollBar().value()
+                self.img_viewer.horizontalScrollBar().setValue(x + viewer_w)
 
             elif e.key() == QtCore.Qt.Key_F:
-                self.display_full = (not self.display_full)
+                self.display_full = (self.display_full + 1) % 3
                 self.change_img_size()
 
             elif (e.key() == QtCore.Qt.Key_O or
