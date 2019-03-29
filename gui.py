@@ -84,17 +84,27 @@ class MainWindow(QMainWindow):
         def keyPressEvent(e):
             #https://doc.qt.io/qt-5.9/qt.html#Key-enum
             # o a h n ? !
+            # 0 1 2 3
+
             viewer_h = self.img_viewer.height()
             viewer_w = self.img_viewer.width()
-            if (e.key() == QtCore.Qt.Key_Up or
-                e.key() == QtCore.Qt.Key_J):
+
+            # Toggle view mode 
+            if e.key() == QtCore.Qt.Key_F:
+                self.display_full = (self.display_full + 1) % 3
+                self.change_img_size()
+
+            # vertical mode
+            elif (e.key() == QtCore.Qt.Key_Up or
+                e.key() == QtCore.Qt.Key_K):
                 y = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.verticalScrollBar().setValue(y - viewer_h)
             elif (e.key() == QtCore.Qt.Key_Down or
-                  e.key() == QtCore.Qt.Key_K):
+                  e.key() == QtCore.Qt.Key_J):
                 y = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.verticalScrollBar().setValue(y + viewer_h)
 
+            # horizontal mode
             elif e.key() == QtCore.Qt.Key_Left:
                 x = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.horizontalScrollBar().setValue(x - viewer_w)
@@ -102,10 +112,7 @@ class MainWindow(QMainWindow):
                 x = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.horizontalScrollBar().setValue(x + viewer_w)
 
-            elif e.key() == QtCore.Qt.Key_F:
-                self.display_full = (self.display_full + 1) % 3
-                self.change_img_size()
-
+            # Selection 
             elif (e.key() == QtCore.Qt.Key_O or
                   e.key() == QtCore.Qt.Key_0):
                 self.choice_viwer.setStyleSheet(
@@ -134,6 +141,7 @@ class MainWindow(QMainWindow):
                 )
                 self.choice_viwer.setText('No\neasy')
 
+            # Selection etc..
             elif (e.key() == QtCore.Qt.Key_Exclam):
                 self.choice_viwer.setStyleSheet(
                     'font:70pt; font-weight:bold; color:green;'
