@@ -12,48 +12,35 @@ from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QIcon, QPixmap, QImage
 
 class MainWindow(QMainWindow):
-    resized = QtCore.pyqtSignal()
+    resize_signal = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.init_ui()
-        #self.show()
+        self.display_full = True
 
         self.showMaximized()
-
-        self.resized.connect(self.someFunction)
+        self.resize_signal.connect(self.change_img_size)
 
     def resizeEvent(self, event):
-        self.resized.emit()
+        self.resize_signal.emit()
         return super(type(self), self).resizeEvent(event)
-    def someFunction(self):
-        print("someFunction")
- 
-        ih = self.img_viewer.height()
-        iw = self.img_viewer.width()
-        print('img viewer',ih,iw)
 
-        h = self.img_label.height()
-        w = self.img_label.width()
-        print('img label',h,w)
+    def change_img_size(self):
+        viewer_w = self.img_viewer.width()
+        viewer_h = self.img_viewer.height()
+        #print('img viewer',viewer_w,viewer_h)
 
         pixmap = QPixmap('./2706002.jpg')
-        h = pixmap.height()
-        w = pixmap.width()
-        print('pixmap',h,w)
-        #self.img_label.setPixmap(pixmap)
-        smaller = pixmap.scaled(iw, h, QtCore.Qt.KeepAspectRatio)
-        #smaller = pixmap.scaled(iw, ih, QtCore.Qt.KeepAspectRatio)
+        origin_w = pixmap.width()
+        origin_h = pixmap.height()
+        #print('pixmap',origin_h,origin_w)
+
+        if self.display_full:
+            smaller = pixmap.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+        else:
+            smaller = pixmap.scaled(viewer_w, origin_h, QtCore.Qt.KeepAspectRatio)
         self.img_label.setPixmap(smaller)
         self.img_label.adjustSize()
-
-        h = smaller.height()
-        w = smaller.width()
-        print('smaller pixmap',h,w)
-
-        h = self.img_label.height()
-        w = self.img_label.width()
-        print('img label after adjust size',h,w)
-        #self.img_label.setPixmap(pixmap.scaled(w,h,QtCore.Qt.KeepAspectRatio))
 
     def init_ui(self):
         #self.setGeometry(200, 200, 850, 750)
