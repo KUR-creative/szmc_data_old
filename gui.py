@@ -81,21 +81,54 @@ class MainWindow(QMainWindow):
             viewer_h = self.img_viewer.height()
             if e.key() == QtCore.Qt.Key_Up:
                 y = self.img_viewer.verticalScrollBar().value()
-                print('y',self.img_viewer.verticalScrollBar().value())
-                print('up')
                 self.img_viewer.verticalScrollBar().setValue(y - viewer_h)
             elif e.key() == QtCore.Qt.Key_Down:
                 y = self.img_viewer.verticalScrollBar().value()
                 self.img_viewer.verticalScrollBar().setValue(y + viewer_h)
-                print('y',self.img_viewer.verticalScrollBar().value())
-                print('down')
+
             elif e.key() == QtCore.Qt.Key_Left:
                 print('left')
             elif e.key() == QtCore.Qt.Key_Right:
                 print('right')
+
             elif e.key() == QtCore.Qt.Key_F:
                 self.display_full = (not self.display_full)
                 self.change_img_size()
+
+            elif (e.key() == QtCore.Qt.Key_O or
+                  e.key() == QtCore.Qt.Key_0):
+                self.choice_viwer.setStyleSheet(
+                    'font:70pt; font-weight:bold; color:black;'
+                )
+                self.choice_viwer.setText('nO\ntext')
+
+            elif (e.key() == QtCore.Qt.Key_A or
+                  e.key() == QtCore.Qt.Key_1):
+                self.choice_viwer.setStyleSheet(
+                    'font:70pt; font-weight:bold; color:blue;'
+                )
+                self.choice_viwer.setText('All\neasy')
+
+            elif (e.key() == QtCore.Qt.Key_H or
+                  e.key() == QtCore.Qt.Key_2):
+                self.choice_viwer.setStyleSheet(
+                    'font:70pt; font-weight:bold; color:magenta;'
+                )
+                self.choice_viwer.setText('Half\neasy')
+
+            elif (e.key() == QtCore.Qt.Key_N or
+                  e.key() == QtCore.Qt.Key_3):
+                self.choice_viwer.setStyleSheet(
+                    'font:70pt; font-weight:bold; color:red;'
+                )
+                self.choice_viwer.setText('No\neasy')
+
+            elif (e.key() == QtCore.Qt.Key_Exclam):
+                self.choice_viwer.setStyleSheet(
+                    'font:70pt; font-weight:bold; color:green;'
+                )
+                self.choice_viwer.setText('!')
+                
         self.img_viewer.keyPressEvent = keyPressEvent
 
 if __name__ == '__main__':
