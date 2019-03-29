@@ -76,7 +76,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         def keyPressEvent(e):
-            #TODO: refactor with dict, eval, ...
+            #TODO: refactor with dict, eval, yml init file....
             #https://doc.qt.io/qt-5.9/qt.html#Key-enum
             # o a h n ? !
             # 0 1 2 3
