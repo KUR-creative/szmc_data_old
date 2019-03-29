@@ -146,6 +146,19 @@ class MainWindow(QMainWindow):
         self.img_viewer.keyPressEvent = keyPressEvent
 
 if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print('Usage: python gui.py desc')
+        exit()
+
+    order = sys.argv[1]
+    if order == 'incr':
+        id_path_list = img_pathseq()
+    elif order == 'desc':
+        id_path_list = img_pathseq(incremental=False)
+    else:
+        print('Usage: python gui.py desc')
+        exit()
+
     app = QApplication(sys.argv)
     ex = MainWindow()
     sys.exit(app.exec_())
