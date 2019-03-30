@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
     def __init__(self, db, id_path_list):
         super().__init__()
         self.db = db
+        self.order = sys.argv[1]
 
         # init session
         work_state = self.db.get_work_state()
@@ -59,8 +60,8 @@ class MainWindow(QMainWindow):
             assert order == sys.argv[1], "saved_order:'%s' != '%s':arg_order" % (order,sys.argv[1])
             self.session = Session(id_path_list, now_id)
 
-        self.img = QPixmap(self.session.path())
         self.now_text = '?'
+        self.display_image()
 
         self.init_ui()
         self.display_full = FULL
@@ -72,6 +73,9 @@ class MainWindow(QMainWindow):
     def resizeEvent(self, event):
         self.resize_signal.emit()
         return super(type(self), self).resizeEvent(event)
+
+    def display_image(self):
+        self.img = QPixmap(self.session.path())
 
     def change_img_size(self):
         viewer_w = self.img_viewer.width()
@@ -94,12 +98,17 @@ class MainWindow(QMainWindow):
 
     #TODO: rearrange order of methods..
     def init_ui(self):
-        #self.statusBar().showMessage('Ready')
         self.init_main_widget()
 
     def confirm(self):   
+        # save current selection
         self.db.update_data(self.session.id(), self.now_text)
-        #print('confirmed!')
+
+        self.session.next()
+        self.db.update_work_state(self.order, self.session.id())
+        # initialize next selection
+        self.display_image()
+        self.now_text = '?'
 
     def init_main_widget(self):
         self.img_label = QLabel()
@@ -189,7 +198,8 @@ class MainWindow(QMainWindow):
 
             # confirm!
             elif e.key() == QtCore.Qt.Key_Return: # or Key_Enter
-                self.confirm()
+                if self.now_text != '?':
+                    self.confirm()
 
             # Selection etc..
             elif (e.key() == QtCore.Qt.Key_Exclam):
