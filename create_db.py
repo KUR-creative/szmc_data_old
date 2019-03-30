@@ -35,6 +35,14 @@ def create_table(name='szmc.db'):
         ); 
         ''')
 
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS work_state(
+            id_order    TEXT CHECK( id_order IN ('incr','desc') )   NOT NULL,
+            now_id      TEXT                                        NOT NULL,
+            FOREIGN KEY(now_id) REFERENCES data(id)
+        ); 
+        ''')
+
         '''
         cursor = db.cursor()
         cursor.execute('SELECT * FROM tab')
@@ -47,7 +55,6 @@ def create_table(name='szmc.db'):
         print(cursor.fetchall())
         '''
         db.commit()
-        db.close()
 
 
 if __name__ == '__main__':
