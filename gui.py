@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self, db, id_path_list):
         super().__init__()
-        self.resize_signal.connect(self.change_img_size)
+        self.resize_signal.connect(self.display_image)
 
         # immutable references
         self.order = sys.argv[1]
@@ -84,11 +84,7 @@ class MainWindow(QMainWindow):
               .format( self.session.id(), disp_mode[self.disp_mode] )
         self.statusBar().showMessage(msg)
 
-    def display_image(self,smaller):
-        self.img_label.setPixmap(smaller)
-        self.img_label.adjustSize()
-
-    def change_img_size(self):
+    def display_image(self):
         viewer_w = self.img_viewer.width()
         viewer_h = self.img_viewer.height()
         origin_w = self.img.width()
@@ -101,7 +97,8 @@ class MainWindow(QMainWindow):
         elif self.disp_mode == ORIGIN_H:
             w,h = viewer_w, origin_h
         smaller = self.img.scaled(w, h, QtCore.Qt.KeepAspectRatio)
-        self.display_image(smaller)
+        self.img_label.setPixmap(smaller)
+        self.img_label.adjustSize()
 
     def confirm(self):   
         # save current selection
@@ -113,7 +110,6 @@ class MainWindow(QMainWindow):
         # initialize next selection
         self.img = QPixmap(self.session.path())
         self.display_image()
-        self.change_img_size()
         self.now_text = '?'
         self.choice_viwer.setText(self.now_text)
         self.update_statusBar()
@@ -151,7 +147,7 @@ class MainWindow(QMainWindow):
             # Toggle view mode 
             if e.key() == QtCore.Qt.Key_F:
                 self.disp_mode = (self.disp_mode + 1) % 3
-                self.change_img_size()
+                self.display_image()
                 self.update_statusBar()
 
             # vertical mode
