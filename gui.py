@@ -51,15 +51,7 @@ class MainWindow(QMainWindow):
         self.db = db
         self.order = sys.argv[1]
 
-        # init session
-        work_state = self.db.get_work_state()
-        if work_state is None:
-            self.session = Session(id_path_list)
-            db.update_work_state(sys.argv[1], self.session.id())
-        else:
-            order,now_id = work_state
-            assert order == sys.argv[1], "saved_order:'%s' != '%s':arg_order" % (order,sys.argv[1])
-            self.session = Session(id_path_list, now_id)
+        self.init_session()
 
         self.now_text = '?'
         self.img = QPixmap(self.session.path())
@@ -70,6 +62,16 @@ class MainWindow(QMainWindow):
         self.update_statusBar()
         self.showMaximized()
         self.resize_signal.connect(self.change_img_size)
+
+    def init_session(self):
+        work_state = self.db.get_work_state()
+        if work_state is None:
+            self.session = Session(id_path_list)
+            db.update_work_state(self.order, self.session.id())
+        else:
+            order,now_id = work_state
+            assert order == self.order, "saved_order:'%s' != '%s':arg_order" % (order,self.order)
+            self.session = Session(id_path_list, now_id)
 
     def update_statusBar(self):
         msg = 'id: {} / mode: {}'\
