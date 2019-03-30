@@ -45,6 +45,14 @@ class DB:
         else:
             return OrderId(*order_id)
 
+    def update_data(self, id, text):
+        assert text in '?!OAHN'
+        table = 'data'
+        self.db.execute(
+            "UPDATE {} SET text = '{}' WHERE id = '{}'"
+            .format(table, text, id)
+        )
+
     def update_work_state(self, order, new_id):
         assert order in ('incr','desc'), "'%s' is not 'incr' nor 'desc'" % order
         table = 'work_state'
@@ -83,6 +91,7 @@ if __name__ == '__main__':
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
         '''
+        db.update_data('1117000','H')
         db.update_work_state('incr','1254000')
         print(db.get_work_state())
         db.clear_work_state(); input()
