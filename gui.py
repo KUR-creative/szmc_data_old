@@ -48,20 +48,22 @@ class MainWindow(QMainWindow):
     resize_signal = QtCore.pyqtSignal()
     def __init__(self, db, id_path_list):
         super().__init__()
-        self.db = db
+        self.resize_signal.connect(self.change_img_size)
+
+        # immutable references
         self.order = sys.argv[1]
+        self.db = db
 
+        # states
         self.init_session()
-
+        self.disp_mode = FULL
         self.now_text = '?'
         self.img = QPixmap(self.session.path())
 
-        self.init_ui()
-        self.disp_mode = FULL
-
+        # init gui
+        self.init_main_widget()
         self.update_statusBar()
         self.showMaximized()
-        self.resize_signal.connect(self.change_img_size)
 
     def init_session(self):
         work_state = self.db.get_work_state()
@@ -112,8 +114,6 @@ class MainWindow(QMainWindow):
         self.img_label.adjustSize()
 
     #TODO: rearrange order of methods..
-    def init_ui(self):
-        self.init_main_widget()
 
     def confirm(self):   
         # save current selection
