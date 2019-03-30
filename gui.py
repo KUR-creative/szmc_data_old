@@ -122,6 +122,7 @@ class MainWindow(QMainWindow):
 
         # initialize next selection
         self.display_image()
+        self.change_img_size()
         self.now_text = '?'
         self.choice_viwer.setText(self.now_text)
         self.update_statusBar()
