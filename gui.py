@@ -15,10 +15,10 @@ def unzip(zipped):
     return zip(*zipped)
 
 class Session:
-    def __init__(self, id_path_list, now_id):
+    def __init__(self, id_path_list, now_id=None):
         self.ids,_ = unzip(id_path_list)
         self.path_dic = {id:path for id,path in id_path_list}
-        self._idx = self.ids.index(now_id)
+        self._idx = self.ids.index(now_id) if now_id else 0
     
     def id_path(self):
         now_id = self.ids[self._idx]
@@ -190,8 +190,12 @@ class MainWindow(QMainWindow):
 import unittest
 class TestSession(unittest.TestCase):
     def test_ctor(self):
-        sess = Session([(1,2),(3,4),(5,6)], 1)
+        sess = Session([(1,2),(3,4),(5,6)], 3)
         self.assertEqual(sess.path_dic, {1:2, 3:4, 5:6})
+        self.assertEqual(sess.id_path(), (3,4))
+        sess = Session([(1,2),(3,4),(5,6)])
+        self.assertEqual(sess.path_dic, {1:2, 3:4, 5:6})
+        self.assertEqual(sess.id_path(), (1,2))
     def test_id_path(self):
         sess = Session([(1,2),(3,4),(5,6)], 1)
         self.assertEqual(sess.id_path(), (1,2))
