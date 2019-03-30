@@ -52,6 +52,7 @@ class DB:
             "UPDATE {} SET text = '{}' WHERE id = '{}'"
             .format(table, text, id)
         )
+        self.db.commit()
 
     def update_work_state(self, order, new_id):
         assert order in ('incr','desc'), "'%s' is not 'incr' nor 'desc'" % order

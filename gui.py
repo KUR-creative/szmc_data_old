@@ -59,8 +59,8 @@ class MainWindow(QMainWindow):
             assert order == sys.argv[1], "saved_order:'%s' != '%s':arg_order" % (order,sys.argv[1])
             self.session = Session(id_path_list, now_id)
 
-        # set current image
         self.img = QPixmap(self.session.path())
+        self.now_text = '?'
 
         self.init_ui()
         self.display_full = FULL
@@ -97,7 +97,8 @@ class MainWindow(QMainWindow):
         self.init_main_widget()
 
     def confirm(self):   
-        print('confirmed!')
+        self.db.update_data(self.session.id(), self.now_text)
+        #print('confirmed!')
 
     def init_main_widget(self):
         self.img_label = QLabel()
@@ -159,6 +160,7 @@ class MainWindow(QMainWindow):
                     'font:70pt; font-weight:bold; color:black;'
                 )
                 self.choice_viwer.setText('nO\ntext')
+                self.now_text = 'O'
 
             elif (e.key() == QtCore.Qt.Key_A or
                   e.key() == QtCore.Qt.Key_1):
@@ -166,6 +168,7 @@ class MainWindow(QMainWindow):
                     'font:70pt; font-weight:bold; color:blue;'
                 )
                 self.choice_viwer.setText('All\neasy')
+                self.now_text = 'A'
 
             elif (e.key() == QtCore.Qt.Key_H or
                   e.key() == QtCore.Qt.Key_2):
@@ -173,6 +176,7 @@ class MainWindow(QMainWindow):
                     'font:70pt; font-weight:bold; color:magenta;'
                 )
                 self.choice_viwer.setText('Half\neasy')
+                self.now_text = 'H'
 
             elif (e.key() == QtCore.Qt.Key_N or
                   e.key() == QtCore.Qt.Key_3):
@@ -180,6 +184,7 @@ class MainWindow(QMainWindow):
                     'font:70pt; font-weight:bold; color:red;'
                 )
                 self.choice_viwer.setText('No\neasy')
+                self.now_text = 'N'
 
             # confirm!
             elif e.key() == QtCore.Qt.Key_Return: # or Key_Enter
@@ -191,6 +196,7 @@ class MainWindow(QMainWindow):
                     'font:70pt; font-weight:bold; color:green;'
                 )
                 self.choice_viwer.setText('!')
+                self.now_text = '!'
                 
         self.img_viewer.keyPressEvent = keyPressEvent
 
