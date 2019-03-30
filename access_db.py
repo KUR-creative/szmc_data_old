@@ -1,5 +1,6 @@
 import sqlite3
-
+from collections import namedtuple
+OrderId = namedtuple('OrderId','order id')
 class DB:
     def __init__(self, db_path):
         self.db = sqlite3.connect('szmc.db')
@@ -37,7 +38,12 @@ class DB:
         cur.execute(
             'SELECT * FROM %s' % table
         )
-        return cur.fetchone()
+
+        order_id = cur.fetchone()
+        if order_id is None:
+            return None
+        else:
+            return OrderId(*order_id)
 
     def update_work_state(self, order, new_id):
         assert order in ('incr','desc'), "'%s' is not 'incr' nor 'desc'" % order
@@ -49,7 +55,7 @@ class DB:
                 .format(table, order, new_id)
             )
         else:
-            saved_order = self.get_work_state()[0]
+            saved_order = self.get_work_state().order
             assert saved_order == order, "saved_order:'%s' != '%s':arg_order" % (saved_order,order)
 
             self.db.execute(
@@ -76,6 +82,7 @@ if __name__ == '__main__':
     '''
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
+        '''
         db.update_work_state('incr','1254000')
         print(db.get_work_state())
         db.clear_work_state(); input()
@@ -85,5 +92,6 @@ if __name__ == '__main__':
         db.update_work_state('incr','1320000'); input()
         db.update_work_state('incr','1442000'); input()
         db.clear_work_state(); input()
+        '''
 
         #db.update_work_state('ppap','1254000')
