@@ -113,6 +113,9 @@ class MainWindow(QMainWindow):
         self.now_text = '?'
         self.choice_viwer.setText(self.now_text)
         self.update_statusBar()
+        # init position of scrollbars
+        self.img_viewer.verticalScrollBar().setValue(0)
+        self.img_viewer.horizontalScrollBar().setValue(0)
 
     def init_main_widget(self):
         self.img_label = QLabel()
@@ -214,6 +217,9 @@ class MainWindow(QMainWindow):
                 self.choice_viwer.setText('!')
                 self.now_text = '!'
                 
+            #print('v:',self.img_viewer.verticalScrollBar().value())
+            #print('h:',self.img_viewer.horizontalScrollBar().value())
+
         self.img_viewer.keyPressEvent = keyPressEvent
 
 import unittest
