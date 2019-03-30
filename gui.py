@@ -24,6 +24,15 @@ class Session:
         now_id = self.ids[self._idx]
         return now_id, self.path_dic[now_id]
 
+    def next(self):
+        last_idx = len(self.ids) - 1
+        if self._idx < last_idx:
+            self._idx += 1
+
+    def prev(self):
+        if self._idx > 0:
+            self._idx -= 1
+
 FULL = 0
 ORIGIN_H = 1
 ORIGIN_W = 2
@@ -186,6 +195,19 @@ class TestSession(unittest.TestCase):
     def test_id_path(self):
         sess = Session([(1,2),(3,4),(5,6)], 1)
         self.assertEqual(sess.id_path(), (1,2))
+    def test_next(self):
+        sess = Session([(1,2),(3,4),(5,6)], 1)
+        self.assertEqual(sess.id_path(), (1,2)); sess.next()
+        self.assertEqual(sess.id_path(), (3,4)); sess.next()
+        self.assertEqual(sess.id_path(), (5,6)); sess.next()
+        self.assertEqual(sess.id_path(), (5,6)); sess.next()
+        self.assertEqual(sess.id_path(), (5,6))
+    def test_prev(self):
+        sess = Session([(1,2),(3,4),(5,6)], 1)
+        sess.prev(); self.assertEqual(sess.id_path(), (1,2)) 
+        sess.prev(); self.assertEqual(sess.id_path(), (1,2)) 
+        sess.next(); self.assertEqual(sess.id_path(), (3,4)) 
+        sess.next(); self.assertEqual(sess.id_path(), (5,6)) 
 
 if __name__ == '__main__':
     unittest.main()
