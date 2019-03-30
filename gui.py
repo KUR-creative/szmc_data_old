@@ -80,8 +80,12 @@ class MainWindow(QMainWindow):
             self.session = Session(id_path_list, now_id)
 
     def update_statusBar(self):
-        msg = 'id: {} / mode: {}'\
-              .format( self.session.id(), disp_mode[self.disp_mode] )
+        len_ids = len(self.session.ids) 
+        now_idx = self.session._idx # incr
+        percent = 100 * (now_idx / len_ids)
+        msg = 'id: {} / mode: {} / {}/{}({:3.4f}%)'\
+              .format(self.session.id(), disp_mode[self.disp_mode],
+                      now_idx, len_ids, percent)
         self.statusBar().showMessage(msg)
 
     def display_image(self):
