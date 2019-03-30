@@ -25,6 +25,13 @@ class MainWindow(QMainWindow):
         self.ids, self.paths = unzip(id_path_list)
         #print(*self.ids, sep='\n')
         #print(*self.paths, sep='\n')
+        work_state = self.db.get_work_state()
+        if work_state is None:
+            pass
+        else:
+            order,now_id = work_state
+            assert order == sys.argv[1], "saved_order:'%s' != '%s':arg_order" % (order,sys.argv[1])
+            print(order, now_id)
         self.img = QPixmap('./2706002.jpg')
 
         self.init_ui()
