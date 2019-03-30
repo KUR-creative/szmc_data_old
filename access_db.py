@@ -1,10 +1,17 @@
 import sqlite3
 
-# TODO: extract with, and get db as arg.
-def img_pathseq(get_sorted=True, incremental=True):
-    with sqlite3.connect('szmc.db') as db:
-        db.execute('PRAGMA foreign_keys = ON;')
-        cur = db.cursor()
+class DB:
+    def __init__(self, db_path):
+        self.db = sqlite3.connect('szmc.db')
+        self.db.execute('PRAGMA foreign_keys = ON;')
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_value, traceback):
+        #print('closed well!')
+        self.db.close()
+
+    def img_pathseq(self, get_sorted=True, incremental=True):
+        cur = self.db.cursor()
         if get_sorted:
             if incremental:
                 cur.execute('''SELECT id,file_path FROM image 
@@ -17,16 +24,16 @@ def img_pathseq(get_sorted=True, incremental=True):
 
         return cur.fetchall()
 
-def num_rows(table):
-    with sqlite3.connect('szmc.db') as db:
-        db.execute('PRAGMA foreign_keys = ON;')
-        cur = db.cursor()
+    def num_rows(self, table):
+        cur = self.db.cursor()
         cur.execute('SELECT count(*) FROM %s' % table)
         n_rows = cur.fetchone()[0]
         return n_rows
 
-def update_work_state(order, new_id):
-    pass
+    def update_work_state(self, order, new_id):
+        if num_rows('work_state') == 0:
+            pass
+
 
 if __name__ == '__main__':
     '''
@@ -36,4 +43,5 @@ if __name__ == '__main__':
     rows = img_pathseq(incremental=False)
     print(*rows, sep='\n')
     '''
-    print(num_rows('work_state'))
+    with DB('szmc.db') as db:
+        print(db.num_rows('work_state'))

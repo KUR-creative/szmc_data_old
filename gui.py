@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from access_db import img_pathseq
+from access_db import DB
 
 import sys
 from PyQt5 import QtCore
@@ -151,14 +151,17 @@ if __name__ == '__main__':
         exit()
 
     order = sys.argv[1]
-    if order == 'incr':
-        id_path_list = img_pathseq()
-    elif order == 'desc':
-        id_path_list = img_pathseq(incremental=False)
-    else:
-        print('Usage: python gui.py desc')
-        exit()
+    with DB('szmc.db') as db:
+        if order == 'incr':
+            id_path_list = db.img_pathseq()
+        elif order == 'desc':
+            id_path_list = db.img_pathseq(incremental=False)
+        else:
+            print('Usage: python gui.py desc')
+            exit()
+        
+        print(*id_path_list, sep='\n')
 
-    app = QApplication(sys.argv)
-    ex = MainWindow()
-    sys.exit(app.exec_())
+        app = QApplication(sys.argv)
+        ex = MainWindow()
+        sys.exit(app.exec_())
