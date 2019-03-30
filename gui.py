@@ -56,10 +56,13 @@ class MainWindow(QMainWindow):
         self.img_label.setPixmap(smaller)
         self.img_label.adjustSize()
 
+    #TODO: rearrange order of methods..
     def init_ui(self):
         #self.statusBar().showMessage('Ready')
         self.init_main_widget()
 
+    def confirm(self):   
+        print('confirmed!')
 
     def init_main_widget(self):
         self.img_label = QLabel()
@@ -69,7 +72,7 @@ class MainWindow(QMainWindow):
 
         self.choice_viwer = QLabel()
         self.choice_viwer.setStyleSheet('font:70pt;')
-        self.choice_viwer.setText('_')
+        self.choice_viwer.setText('?')
         self.choice_viwer.resize(200,100)
 
         self.choice_viwer.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Ignored)
@@ -142,6 +145,10 @@ class MainWindow(QMainWindow):
                     'font:70pt; font-weight:bold; color:red;'
                 )
                 self.choice_viwer.setText('No\neasy')
+
+            # confirm!
+            elif e.key() == QtCore.Qt.Key_Return: # or Key_Enter
+                self.confirm()
 
             # Selection etc..
             elif (e.key() == QtCore.Qt.Key_Exclam):
