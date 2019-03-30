@@ -46,6 +46,10 @@ ORIGIN_H = 1
 ORIGIN_W = 2
 class MainWindow(QMainWindow):
     resize_signal = QtCore.pyqtSignal()
+    def resizeEvent(self, event):
+        self.resize_signal.emit()
+        return super(type(self), self).resizeEvent(event)
+
     def __init__(self, db, id_path_list):
         super().__init__()
         self.resize_signal.connect(self.change_img_size)
@@ -79,10 +83,6 @@ class MainWindow(QMainWindow):
         msg = 'id: {} / mode: {}'\
               .format( self.session.id(), disp_mode[self.disp_mode] )
         self.statusBar().showMessage(msg)
-
-    def resizeEvent(self, event):
-        self.resize_signal.emit()
-        return super(type(self), self).resizeEvent(event)
 
     def display_image(self):
         viewer_w = self.img_viewer.width()
