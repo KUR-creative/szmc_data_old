@@ -10,10 +10,15 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QIcon, QPixmap, QImage
-from collections import OrderedDict
 
 def unzip(zipped):
     return zip(*zipped)
+
+class Session:
+    def __init__(self, id_path_list, now_idx=0):
+        self.ids,_ = unzip(id_path_list)
+        self.path_dic = {id:path for id,path in id_path_list}
+        self._idx = now_idx
 
 FULL = 0
 ORIGIN_H = 1
@@ -24,9 +29,6 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.db = db
 
-        self.img_paths = OrderedDict()
-        for id_,path in id_path_list:
-            self.img_paths[id_] = path
         #print(*self.img_paths.items(),sep='\n')
 
         #print(*self.ids, sep='\n')
@@ -172,7 +174,14 @@ class MainWindow(QMainWindow):
                 
         self.img_viewer.keyPressEvent = keyPressEvent
 
+import unittest
+class TestSession(unittest.TestCase):
+    def test_ctor(self):
+        sess = Session([(1,2),(3,4),(5,6)])
+        self.assertEqual(sess.path_dic, {1:2, 3:4, 5:6})
+
 if __name__ == '__main__':
+    unittest.main()
     if len(sys.argv) != 2:
         print('Usage: python gui.py desc')
         exit()
