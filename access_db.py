@@ -54,11 +54,13 @@ class DB:
             )
 
         assert self.num_rows(table) == 1, "Number of rows are not 1, something very weird happened! Notice it to db manager..."
+        self.db.commit()
 
     def clear_work_state(self):
         table = 'work_state'
         self.db.execute( "DELETE FROM {}" .format(table))
         assert self.num_rows(table) == 0, "Number of rows are not 0, something very weird happened! Notice it to db manager..."
+        self.db.commit()
 
 if __name__ == '__main__':
     '''
@@ -70,7 +72,11 @@ if __name__ == '__main__':
     '''
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
-        db.update_work_state('incr','1254000')
-        db.update_work_state('incr','1117000')
-        #db.clear_work_state()
+        #db.update_work_state('incr','1254000'); input()
+        #db.update_work_state('incr','1117000'); input()
+        #db.clear_work_state(); input()
+        #db.update_work_state('incr','1320000'); input()
+        #db.update_work_state('incr','1442000'); input()
+        #db.clear_work_state(); input()
+
         #db.update_work_state('ppap','1254000')
