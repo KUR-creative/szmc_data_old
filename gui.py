@@ -48,11 +48,11 @@ class MainWindow(QMainWindow):
         #print(*self.img_paths, sep='\n')
         work_state = self.db.get_work_state()
         if work_state is None:
-            pass
+            self.session = Session(id_path_list)
         else:
             order,now_id = work_state
             assert order == sys.argv[1], "saved_order:'%s' != '%s':arg_order" % (order,sys.argv[1])
-            print(order, now_id)
+            self.session = Session(id_path_list, now_id)
         self.img = QPixmap('./2706002.jpg')
 
         self.init_ui()
@@ -214,7 +214,7 @@ class TestSession(unittest.TestCase):
         sess.next(); self.assertEqual(sess.id_path(), (5,6)) 
 
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
     if len(sys.argv) != 2:
         print('Usage: python gui.py desc')
         exit()
