@@ -32,6 +32,7 @@ class DB:
         return n_rows
 
     def update_work_state(self, order, new_id):
+        assert order in ('incr','desc'), "'%s' is not 'incr' nor 'desc'" % order
         table = 'work_state'
         num_rows = self.num_rows(table)
         if num_rows == 0:
@@ -40,9 +41,21 @@ class DB:
                 .format(table, order, new_id)
             )
         else:
-            pass
+            cur = self.db.cursor()
+            cur.execute(
+                'SELECT id_order FROM %s' % table
+            )
+            saved_order = cur.fetchone()[0]
 
-        assert self.num_rows(table) == 1
+            assert saved_order == order, "saved_order:'%s' != '%s':arg_order" % (saved_order,order)
+            '''
+            self.db.execute(
+                "UPDATE {} SET now_id = {} WHERE id_order = {}"
+                .format(table, new_id, order)
+            )
+            '''
+
+        assert self.num_rows(table) == 1, "Number of rows are not 1, something very weird happened! Notice it to db manager..."
 
 if __name__ == '__main__':
     '''
@@ -55,3 +68,5 @@ if __name__ == '__main__':
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
         db.update_work_state('incr','1117000')
+        db.update_work_state('desc','1254000')
+        #db.update_work_state('ppap','1254000')
