@@ -40,6 +40,7 @@ class Session:
         if self._idx > 0:
             self._idx -= 1
 
+disp_mode = ['Full','Original Height','Original Width']
 FULL = 0
 ORIGIN_H = 1
 ORIGIN_W = 2
@@ -64,9 +65,11 @@ class MainWindow(QMainWindow):
         self.img = QPixmap(self.session.path())
 
         self.init_ui()
-        self.display_full = FULL
+        self.disp_mode = FULL
 
-        self.statusBar().showMessage('id: %s' % self.session.id())
+        msg = 'id: {} / mode: {}'\
+              .format( self.session.id(), disp_mode[self.disp_mode] )
+        self.statusBar().showMessage(msg)
         self.showMaximized()
         self.resize_signal.connect(self.change_img_size)
 
@@ -94,11 +97,11 @@ class MainWindow(QMainWindow):
         origin_h = self.img.height()
         #print('pixmap',origin_h,origin_w)
 
-        if self.display_full == FULL:
+        if self.disp_mode == FULL:
             smaller = self.img.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
-        elif self.display_full == ORIGIN_W:
+        elif self.disp_mode == ORIGIN_W:
             smaller = self.img.scaled(origin_w, viewer_h, QtCore.Qt.KeepAspectRatio)
-        elif self.display_full == ORIGIN_H:
+        elif self.disp_mode == ORIGIN_H:
             smaller = self.img.scaled(viewer_w, origin_h, QtCore.Qt.KeepAspectRatio)
         self.img_label.setPixmap(smaller)
         self.img_label.adjustSize()
@@ -113,10 +116,15 @@ class MainWindow(QMainWindow):
 
         self.session.next()
         self.db.update_work_state(self.order, self.session.id())
+
         # initialize next selection
         self.display_image()
         self.now_text = '?'
         self.choice_viwer.setText(self.now_text)
+
+        msg = 'id: {} / mode: {}'\
+              .format( self.session.id(), disp_mode[self.disp_mode] )
+        self.statusBar().showMessage(msg)
 
     def init_main_widget(self):
         self.img_label = QLabel()
@@ -150,7 +158,7 @@ class MainWindow(QMainWindow):
 
             # Toggle view mode 
             if e.key() == QtCore.Qt.Key_F:
-                self.display_full = (self.display_full + 1) % 3
+                self.disp_mode = (self.disp_mode + 1) % 3
                 self.change_img_size()
 
             # vertical mode
