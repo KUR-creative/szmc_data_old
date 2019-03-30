@@ -19,6 +19,10 @@ class Session:
         self.ids,_ = unzip(id_path_list)
         self.path_dic = {id:path for id,path in id_path_list}
         self._idx = now_idx
+    
+    def id_path(self):
+        now_id = self.ids[self._idx]
+        return now_id, self.path_dic[now_id]
 
 FULL = 0
 ORIGIN_H = 1
@@ -179,6 +183,9 @@ class TestSession(unittest.TestCase):
     def test_ctor(self):
         sess = Session([(1,2),(3,4),(5,6)])
         self.assertEqual(sess.path_dic, {1:2, 3:4, 5:6})
+    def test_id_path(self):
+        sess = Session([(1,2),(3,4),(5,6)])
+        self.assertEqual(sess.id_path(), (1,2))
 
 if __name__ == '__main__':
     unittest.main()
