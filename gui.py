@@ -65,6 +65,7 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.display_full = FULL
 
+        self.statusBar().showMessage('id: %s' % self.session.id())
         self.showMaximized()
         self.resize_signal.connect(self.change_img_size)
 
