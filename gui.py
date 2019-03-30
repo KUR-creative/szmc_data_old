@@ -185,7 +185,8 @@ class MainWindow(QMainWindow):
                 self.now_text = 'O'
 
             elif (e.key() == QtCore.Qt.Key_A or
-                  e.key() == QtCore.Qt.Key_1):
+                  e.key() == QtCore.Qt.Key_1 or
+                  e.key() == QtCore.Qt.Key_Space ):
                 self.choice_viwer.setStyleSheet(
                     'font:70pt; font-weight:bold; color:blue;'
                 )
