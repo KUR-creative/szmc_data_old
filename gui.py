@@ -49,10 +49,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.db = db
 
-        #print(*self.img_paths.items(),sep='\n')
-
-        #print(*self.ids, sep='\n')
-        #print(*self.img_paths, sep='\n')
+        # init session
         work_state = self.db.get_work_state()
         if work_state is None:
             self.session = Session(id_path_list)
@@ -60,7 +57,9 @@ class MainWindow(QMainWindow):
             order,now_id = work_state
             assert order == sys.argv[1], "saved_order:'%s' != '%s':arg_order" % (order,sys.argv[1])
             self.session = Session(id_path_list, now_id)
-        self.img = QPixmap('./2706002.jpg')
+
+        # set current image
+        self.img = QPixmap(self.session.path())
 
         self.init_ui()
         self.display_full = FULL
