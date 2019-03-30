@@ -77,6 +77,13 @@ class MainWindow(QMainWindow):
     def display_image(self):
         self.img = QPixmap(self.session.path())
 
+        viewer_w = self.img_viewer.width()
+        viewer_h = self.img_viewer.height()
+        smaller = self.img.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+
+        self.img_label.setPixmap(smaller)
+        self.img_label.adjustSize()
+
     def change_img_size(self):
         viewer_w = self.img_viewer.width()
         viewer_h = self.img_viewer.height()
