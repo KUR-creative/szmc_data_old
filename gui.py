@@ -169,10 +169,10 @@ class MainWindow(QMainWindow):
 
             # horizontal mode
             elif e.key() == QtCore.Qt.Key_Left:
-                x = self.img_viewer.verticalScrollBar().value()
+                x = self.img_viewer.horizontalScrollBar().value()
                 self.img_viewer.horizontalScrollBar().setValue(x - viewer_w)
             elif e.key() == QtCore.Qt.Key_Right:
-                x = self.img_viewer.verticalScrollBar().value()
+                x = self.img_viewer.horizontalScrollBar().value()
                 self.img_viewer.horizontalScrollBar().setValue(x + viewer_w)
 
             # Selection 
