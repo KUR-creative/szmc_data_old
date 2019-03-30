@@ -24,6 +24,13 @@ class Session:
         now_id = self.ids[self._idx]
         return now_id, self.path_dic[now_id]
 
+    def id(self): 
+        return self.ids[self._idx]
+
+    def path(self):
+        now_id = self.ids[self._idx]
+        return self.path_dic[now_id]
+
     def next(self):
         last_idx = len(self.ids) - 1
         if self._idx < last_idx:
