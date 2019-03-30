@@ -8,6 +8,7 @@ class DB:
         return self
     def __exit__(self, exc_type, exc_value, traceback):
         #print('closed well!')
+        self.db.commit()
         self.db.close()
 
     def img_pathseq(self, get_sorted=True, incremental=True):
@@ -31,9 +32,17 @@ class DB:
         return n_rows
 
     def update_work_state(self, order, new_id):
-        if num_rows('work_state') == 0:
+        table = 'work_state'
+        num_rows = self.num_rows(table)
+        if num_rows == 0:
+            self.db.execute(
+                "INSERT INTO {} (id_order, now_id) VALUES ('{}','{}')"\
+                .format(table, order, new_id)
+            )
+        else:
             pass
 
+        assert self.num_rows(table) == 1
 
 if __name__ == '__main__':
     '''
@@ -45,3 +54,4 @@ if __name__ == '__main__':
     '''
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
+        db.update_work_state('incr','1117000')
