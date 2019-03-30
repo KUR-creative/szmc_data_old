@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
             self.session = Session(id_path_list, now_id)
 
         self.now_text = '?'
-        self.display_image()
+        self.img = QPixmap(self.session.path())
 
         self.init_ui()
         self.display_full = FULL
@@ -116,6 +116,7 @@ class MainWindow(QMainWindow):
         # initialize next selection
         self.display_image()
         self.now_text = '?'
+        self.choice_viwer.setText(self.now_text)
 
     def init_main_widget(self):
         self.img_label = QLabel()
