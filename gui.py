@@ -84,34 +84,24 @@ class MainWindow(QMainWindow):
               .format( self.session.id(), disp_mode[self.disp_mode] )
         self.statusBar().showMessage(msg)
 
-    def display_image(self):
-        viewer_w = self.img_viewer.width()
-        viewer_h = self.img_viewer.height()
-        smaller = self.img.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
-
+    def display_image(self,smaller):
         self.img_label.setPixmap(smaller)
         self.img_label.adjustSize()
 
     def change_img_size(self):
         viewer_w = self.img_viewer.width()
         viewer_h = self.img_viewer.height()
-        #print('img viewer',viewer_w,viewer_h)
-
-        #pixmap = QPixmap('./670984.gif')
         origin_w = self.img.width()
         origin_h = self.img.height()
-        #print('pixmap',origin_h,origin_w)
 
         if self.disp_mode == FULL:
-            smaller = self.img.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+            w,h = viewer_w, viewer_h
         elif self.disp_mode == ORIGIN_W:
-            smaller = self.img.scaled(origin_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+            w,h = origin_w, viewer_h
         elif self.disp_mode == ORIGIN_H:
-            smaller = self.img.scaled(viewer_w, origin_h, QtCore.Qt.KeepAspectRatio)
-        self.img_label.setPixmap(smaller)
-        self.img_label.adjustSize()
-
-    #TODO: rearrange order of methods..
+            w,h = viewer_w, origin_h
+        smaller = self.img.scaled(w, h, QtCore.Qt.KeepAspectRatio)
+        self.display_image(smaller)
 
     def confirm(self):   
         # save current selection
