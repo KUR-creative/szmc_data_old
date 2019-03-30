@@ -70,7 +70,7 @@ if __name__ == '__main__':
     '''
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
-        db.update_work_state('incr','1117000')
         db.update_work_state('incr','1254000')
-        db.clear_work_state()
+        db.update_work_state('incr','1117000')
+        #db.clear_work_state()
         #db.update_work_state('ppap','1254000')

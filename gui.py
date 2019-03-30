@@ -11,13 +11,22 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QIcon, QPixmap, QImage
 
+def unzip(zipped):
+    return zip(*zipped)
+
 FULL = 0
 ORIGIN_H = 1
 ORIGIN_W = 2
 class MainWindow(QMainWindow):
     resize_signal = QtCore.pyqtSignal()
-    def __init__(self):
+    def __init__(self, db, id_path_list):
         super().__init__()
+        self.db = db
+        self.ids, self.paths = unzip(id_path_list)
+        #print(*self.ids, sep='\n')
+        #print(*self.paths, sep='\n')
+        self.img = QPixmap('./2706002.jpg')
+
         self.init_ui()
         self.display_full = FULL
 
@@ -33,19 +42,17 @@ class MainWindow(QMainWindow):
         viewer_h = self.img_viewer.height()
         #print('img viewer',viewer_w,viewer_h)
 
-        pixmap = QPixmap('./big.jpg')
-        pixmap = QPixmap('./2706002.jpg')
         #pixmap = QPixmap('./670984.gif')
-        origin_w = pixmap.width()
-        origin_h = pixmap.height()
+        origin_w = self.img.width()
+        origin_h = self.img.height()
         #print('pixmap',origin_h,origin_w)
 
         if self.display_full == FULL:
-            smaller = pixmap.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+            smaller = self.img.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
         elif self.display_full == ORIGIN_W:
-            smaller = pixmap.scaled(origin_w, viewer_h, QtCore.Qt.KeepAspectRatio)
+            smaller = self.img.scaled(origin_w, viewer_h, QtCore.Qt.KeepAspectRatio)
         elif self.display_full == ORIGIN_H:
-            smaller = pixmap.scaled(viewer_w, origin_h, QtCore.Qt.KeepAspectRatio)
+            smaller = self.img.scaled(viewer_w, origin_h, QtCore.Qt.KeepAspectRatio)
         self.img_label.setPixmap(smaller)
         self.img_label.adjustSize()
 
@@ -160,8 +167,6 @@ if __name__ == '__main__':
             print('Usage: python gui.py desc')
             exit()
         
-        print(*id_path_list, sep='\n')
-
         app = QApplication(sys.argv)
-        ex = MainWindow()
+        ex = MainWindow(db, id_path_list)
         sys.exit(app.exec_())
