@@ -85,8 +85,6 @@ class MainWindow(QMainWindow):
         return super(type(self), self).resizeEvent(event)
 
     def display_image(self):
-        self.img = QPixmap(self.session.path())
-
         viewer_w = self.img_viewer.width()
         viewer_h = self.img_viewer.height()
         smaller = self.img.scaled(viewer_w, viewer_h, QtCore.Qt.KeepAspectRatio)
@@ -123,6 +121,7 @@ class MainWindow(QMainWindow):
         self.db.update_work_state(self.order, self.session.id())
 
         # initialize next selection
+        self.img = QPixmap(self.session.path())
         self.display_image()
         self.change_img_size()
         self.now_text = '?'
