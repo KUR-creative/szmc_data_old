@@ -67,11 +67,14 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.disp_mode = FULL
 
+        self.update_statusBar()
+        self.showMaximized()
+        self.resize_signal.connect(self.change_img_size)
+
+    def update_statusBar(self):
         msg = 'id: {} / mode: {}'\
               .format( self.session.id(), disp_mode[self.disp_mode] )
         self.statusBar().showMessage(msg)
-        self.showMaximized()
-        self.resize_signal.connect(self.change_img_size)
 
     def resizeEvent(self, event):
         self.resize_signal.emit()
@@ -121,10 +124,7 @@ class MainWindow(QMainWindow):
         self.display_image()
         self.now_text = '?'
         self.choice_viwer.setText(self.now_text)
-
-        msg = 'id: {} / mode: {}'\
-              .format( self.session.id(), disp_mode[self.disp_mode] )
-        self.statusBar().showMessage(msg)
+        self.update_statusBar()
 
     def init_main_widget(self):
         self.img_label = QLabel()
@@ -160,6 +160,7 @@ class MainWindow(QMainWindow):
             if e.key() == QtCore.Qt.Key_F:
                 self.disp_mode = (self.disp_mode + 1) % 3
                 self.change_img_size()
+                self.update_statusBar()
 
             # vertical mode
             elif (e.key() == QtCore.Qt.Key_Up or
