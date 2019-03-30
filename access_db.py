@@ -82,8 +82,8 @@ if __name__ == '__main__':
     '''
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
-        db.update_work_state('incr','1254000')
         '''
+        db.update_work_state('incr','1254000')
         print(db.get_work_state())
         db.clear_work_state(); input()
         db.update_work_state('incr','1254000'); input()

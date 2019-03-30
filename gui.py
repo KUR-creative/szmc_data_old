@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QIcon, QPixmap, QImage
+from collections import OrderedDict
 
 def unzip(zipped):
     return zip(*zipped)
@@ -22,9 +23,14 @@ class MainWindow(QMainWindow):
     def __init__(self, db, id_path_list):
         super().__init__()
         self.db = db
-        self.ids, self.paths = unzip(id_path_list)
+
+        self.img_paths = OrderedDict()
+        for id_,path in id_path_list:
+            self.img_paths[id_] = path
+        #print(*self.img_paths.items(),sep='\n')
+
         #print(*self.ids, sep='\n')
-        #print(*self.paths, sep='\n')
+        #print(*self.img_paths, sep='\n')
         work_state = self.db.get_work_state()
         if work_state is None:
             pass
