@@ -31,6 +31,14 @@ class DB:
         n_rows = cur.fetchone()[0]
         return n_rows
 
+    def get_work_state(self):
+        table = 'work_state'
+        cur = self.db.cursor()
+        cur.execute(
+            'SELECT * FROM %s' % table
+        )
+        return cur.fetchone()
+
     def update_work_state(self, order, new_id):
         assert order in ('incr','desc'), "'%s' is not 'incr' nor 'desc'" % order
         table = 'work_state'
@@ -41,11 +49,7 @@ class DB:
                 .format(table, order, new_id)
             )
         else:
-            cur = self.db.cursor()
-            cur.execute(
-                'SELECT id_order FROM %s' % table
-            )
-            saved_order = cur.fetchone()[0]
+            saved_order = self.get_work_state()[0]
             assert saved_order == order, "saved_order:'%s' != '%s':arg_order" % (saved_order,order)
 
             self.db.execute(
@@ -72,11 +76,14 @@ if __name__ == '__main__':
     '''
     with DB('szmc.db') as db:
         print(db.num_rows('work_state'))
-        #db.update_work_state('incr','1254000'); input()
-        #db.update_work_state('incr','1117000'); input()
-        #db.clear_work_state(); input()
-        #db.update_work_state('incr','1320000'); input()
-        #db.update_work_state('incr','1442000'); input()
-        #db.clear_work_state(); input()
+        db.update_work_state('incr','1254000')
+        print(db.get_work_state())
+        db.clear_work_state(); input()
+        db.update_work_state('incr','1254000'); input()
+        db.update_work_state('incr','1117000'); input()
+        db.clear_work_state(); input()
+        db.update_work_state('incr','1320000'); input()
+        db.update_work_state('incr','1442000'); input()
+        db.clear_work_state(); input()
 
         #db.update_work_state('ppap','1254000')
