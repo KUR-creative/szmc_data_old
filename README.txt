@@ -1,3 +1,22 @@
+ <유용한 SQL 명령들>
+
+id로 정렬하여 텍스트가 'O'인 이미지 전부 보기
+SELECT * FROM data WHERE text = 'O' ORDER BY CAST(id AS INT)
+
+텍스트가 'O'인 이미지(행) 개수 세기
+SELECT count(*) FROM data WHERE text = 'O'
+
+텍스트가 'O'이고 
+단부루 메타데이터로 comic이 설정된 이미지들을
+id 순서로 나열하여 보기
+SELECT * 
+FROM data, metadata
+WHERE data.id = metadata.id 
+  and data.text = 'O' 
+  and metadata.comic = 1
+ORDER BY CAST(data.id AS INT)
+
+
  [실행 하는 법]
 1. cmd를 실행한다(오른쪽 아래 윈도우 검색창에서 cmd)
 2. 적절한 명령어로 NEW_SZMC\ 로 이동
