@@ -9,7 +9,7 @@ def unzip(zipped):
 OrderId = namedtuple('OrderId','order id')
 class DB:
     def __init__(self, db_path):
-        self.db = sqlite3.connect('szmc.db')
+        self.db = sqlite3.connect(db_path)
         self.db.execute('PRAGMA foreign_keys = ON;')
     def __enter__(self):
         return self
