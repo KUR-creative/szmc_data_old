@@ -1,14 +1,20 @@
- <À¯¿ëÇÑ SQL ¸í·Éµé>
+ <ìœ ìš©í•œ SQL ëª…ë ¹ë“¤>
 
-id·Î Á¤·ÄÇÏ¿© ÅØ½ºÆ®°¡ 'O'ÀÎ ÀÌ¹ÌÁö ÀüºÎ º¸±â
+id ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ ë³´ê¸°
+SELECT * FROM data ORDER BY CAST(id AS INTEGER) DESC
+
+id ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ë³´ê¸°
+SELECT * FROM data ORDER BY CAST(id AS INTEGER)
+
+idë¡œ ì •ë ¬í•˜ì—¬ í…ìŠ¤íŠ¸ê°€ 'O'ì¸ ì´ë¯¸ì§€ ì „ë¶€ ë³´ê¸°
 SELECT * FROM data WHERE text = 'O' ORDER BY CAST(id AS INT)
 
-ÅØ½ºÆ®°¡ 'O'ÀÎ ÀÌ¹ÌÁö(Çà) °³¼ö ¼¼±â
+í…ìŠ¤íŠ¸ê°€ 'O'ì¸ ì´ë¯¸ì§€(í–‰) ê°œìˆ˜ ì„¸ê¸°
 SELECT count(*) FROM data WHERE text = 'O'
 
-ÅØ½ºÆ®°¡ 'O'ÀÌ°í 
-´ÜºÎ·ç ¸ÞÅ¸µ¥ÀÌÅÍ·Î comicÀÌ ¼³Á¤µÈ ÀÌ¹ÌÁöµéÀ»
-id ¼ø¼­·Î ³ª¿­ÇÏ¿© º¸±â
+í…ìŠ¤íŠ¸ê°€ 'O'ì´ê³  
+ë‹¨ë¶€ë£¨ ë©”íƒ€ë°ì´í„°ë¡œ comicì´ ì„¤ì •ëœ ì´ë¯¸ì§€ë“¤ì„
+id ìˆœì„œë¡œ ë‚˜ì—´í•˜ì—¬ ë³´ê¸°
 SELECT * 
 FROM data, metadata
 WHERE data.id = metadata.id 
@@ -17,42 +23,42 @@ WHERE data.id = metadata.id
 ORDER BY CAST(data.id AS INT)
 
 
- [½ÇÇà ÇÏ´Â ¹ý]
-1. cmd¸¦ ½ÇÇàÇÑ´Ù(¿À¸¥ÂÊ ¾Æ·¡ À©µµ¿ì °Ë»öÃ¢¿¡¼­ cmd)
-2. ÀûÀýÇÑ ¸í·É¾î·Î NEW_SZMC\ ·Î ÀÌµ¿
+ [ì‹¤í–‰ í•˜ëŠ” ë²•]
+1. cmdë¥¼ ì‹¤í–‰í•œë‹¤(ì˜¤ë¥¸ìª½ ì•„ëž˜ ìœˆë„ìš° ê²€ìƒ‰ì°½ì—ì„œ cmd)
+2. ì ì ˆí•œ ëª…ë ¹ì–´ë¡œ NEW_SZMC\ ë¡œ ì´ë™
 E:
 cd NEW_SZMC
 
 3. 
 .\NEW_SZMC\szmc\Script\activate.bat
-½ÇÇà
-±×·¯¸é Ä¿¸Çµå¶óÀÎ ¾Õ¿¡ (szmc)°¡ ºÙ´Â´Ù.
+ì‹¤í–‰
+ê·¸ëŸ¬ë©´ ì»¤ë§¨ë“œë¼ì¸ ì•žì— (szmc)ê°€ ë¶™ëŠ”ë‹¤.
 E:\NEW_SZMC>
 (szmc) E:\NEW_SZMC>
 
-4. guy.py ÇÁ·Î±×·¥ ½ÇÇà. ¹Ýµå½Ã desc(descendant)·Î ÇØ¾ß ÇÑ´Ù.
+4. guy.py í”„ë¡œê·¸ëž¨ ì‹¤í–‰. ë°˜ë“œì‹œ desc(descendant)ë¡œ í•´ì•¼ í•œë‹¤.
 (szmc) E:\NEW_SZMC>python gui.py desc
 
 
- [µ¥ÀÌÅÍº£ÀÌ½º Á¶È¸ÇÏ´Â ¹ý]
-gui.py´Â NEW_SZMC¿¡ ÀÖ´Â szmc.db¿¡ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÑ´Ù.
-1. szmc.db¸¦ ´õºíÅ¬¸¯ÇÏ¸é µðºñ ºê¶ó¿ìÀú¸¦ ÄÓ ¼ö ÀÖ´Ù.
-2. <SQL ½ÇÇà> ÅÇ¿¡¼­ SQLÃ¢¿¡ ´ÙÀ½À» ÀÔ·ÂÇÏ°í ½ÇÇà ¹öÆ°À» ´©¸¥´Ù.
+ [ë°ì´í„°ë² ì´ìŠ¤ ì¡°íšŒí•˜ëŠ” ë²•]
+gui.pyëŠ” NEW_SZMCì— ìžˆëŠ” szmc.dbì— ë°ì´í„°ë¥¼ ì €ìž¥í•œë‹¤.
+1. szmc.dbë¥¼ ë”ë¸”í´ë¦­í•˜ë©´ ë””ë¹„ ë¸Œë¼ìš°ì €ë¥¼ ì¼¤ ìˆ˜ ìžˆë‹¤.
+2. <SQL ì‹¤í–‰> íƒ­ì—ì„œ SQLì°½ì— ë‹¤ìŒì„ ìž…ë ¥í•˜ê³  ì‹¤í–‰ ë²„íŠ¼ì„ ëˆ„ë¥¸ë‹¤.
 SELECT * FROM data ORDER BY CAST(id AS INTEGER) DESC
-±×·¯¸é idÀÇ ³»¸²Â÷¼øÀ¸·Î ¹è¿­µÈ data Å×ÀÌºíÀ» º¼ ¼ö ÀÖ´Ù.
+ê·¸ëŸ¬ë©´ idì˜ ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ ë°°ì—´ëœ data í…Œì´ë¸”ì„ ë³¼ ìˆ˜ ìžˆë‹¤.
 
-cf) SELECT * FROM data ORDER BY CAST(id AS INTEGER)   id ¿À¸§Â÷¼øÀ¸·Î º¸±â
+cf) SELECT * FROM data ORDER BY CAST(id AS INTEGER)   id ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ë³´ê¸°
  
  
- [µ¥ÀÌÅÍº£ÀÌ½º¸¦ ¼öÁ¤ÇÏ´Â ¹ý]
-1. <SQL ½ÇÇà> ÅÇ¿¡¼­ Á¶È¸ÇÏ¿© ¼öÁ¤ÀÌ ÇÊ¿äÇÑ id¸¦ È®ÀÎÇÏ°í º¹»çÇÑ´Ù.
-2. <µ¥ÀÌÅÍ º¸±â> ÅÇÀ¸·Î µ¹¾Æ¿Í¼­ Å×ÀÌºí(T)¿¡¼­ data¸¦ ¼±ÅÃÇÑ´Ù
-3. ¿øÇÏ´Â Ä­À» ¼±ÅÃÇØ¼­ ¼öÁ¤ÇÏ°í 'º¯°æ»çÇ× ÀúÀåÇÏ±â(W)'¸¦ ´©¸£¸é ÀúÀåÀÌ µÈ´Ù.
+ [ë°ì´í„°ë² ì´ìŠ¤ë¥¼ ìˆ˜ì •í•˜ëŠ” ë²•]
+1. <SQL ì‹¤í–‰> íƒ­ì—ì„œ ì¡°íšŒí•˜ì—¬ ìˆ˜ì •ì´ í•„ìš”í•œ idë¥¼ í™•ì¸í•˜ê³  ë³µì‚¬í•œë‹¤.
+2. <ë°ì´í„° ë³´ê¸°> íƒ­ìœ¼ë¡œ ëŒì•„ì™€ì„œ í…Œì´ë¸”(T)ì—ì„œ dataë¥¼ ì„ íƒí•œë‹¤
+3. ì›í•˜ëŠ” ì¹¸ì„ ì„ íƒí•´ì„œ ìˆ˜ì •í•˜ê³  'ë³€ê²½ì‚¬í•­ ì €ìž¥í•˜ê¸°(W)'ë¥¼ ëˆ„ë¥´ë©´ ì €ìž¥ì´ ëœë‹¤.
 
  
- [½Ç¼öÇØ¼­ µ¹¾Æ°¡°í ½ÍÀ» ¶§]
-gui.py´Â ÇöÀç ÀÛ¾÷ÇØ¾ßÇÒ ÀÌ¹ÌÁöÀÇ id¸¦ work_state¿¡ ÀúÀåÇÑ´Ù.
-1. <SQL ½ÇÇà> ÅÇ¿¡¼­ Á¶È¸ÇÏ¿© ¼öÁ¤ÀÌ ÇÊ¿äÇÑ id¸¦ È®ÀÎÇÏ°í º¹»çÇÑ´Ù.
-2. <µ¥ÀÌÅÍ º¸±â> ÅÇÀ¸·Î µ¹¾Æ¿Í¼­ Å×ÀÌºí(T)¿¡¼­ work_state¸¦ ¼±ÅÃÇÑ´Ù.
-3. id_order´Â °Çµå¸®Áö ¸»°í, now_id¿¡ 1.¿¡¼­ º¹»çÇÑ id¸¦ ºÙ¿©³Ö´Â´Ù
-4. gui.py¸¦ ´Ù½Ã ½ÇÇàÇÑ´Ù.
+ [ì‹¤ìˆ˜í•´ì„œ ëŒì•„ê°€ê³  ì‹¶ì„ ë•Œ]
+gui.pyëŠ” í˜„ìž¬ ìž‘ì—…í•´ì•¼í•  ì´ë¯¸ì§€ì˜ idë¥¼ work_stateì— ì €ìž¥í•œë‹¤.
+1. <SQL ì‹¤í–‰> íƒ­ì—ì„œ ì¡°íšŒí•˜ì—¬ ìˆ˜ì •ì´ í•„ìš”í•œ idë¥¼ í™•ì¸í•˜ê³  ë³µì‚¬í•œë‹¤.
+2. <ë°ì´í„° ë³´ê¸°> íƒ­ìœ¼ë¡œ ëŒì•„ì™€ì„œ í…Œì´ë¸”(T)ì—ì„œ work_stateë¥¼ ì„ íƒí•œë‹¤.
+3. id_orderëŠ” ê±´ë“œë¦¬ì§€ ë§ê³ , now_idì— 1.ì—ì„œ ë³µì‚¬í•œ idë¥¼ ë¶™ì—¬ë„£ëŠ”ë‹¤
+4. gui.pyë¥¼ ë‹¤ì‹œ ì‹¤í–‰í•œë‹¤.
