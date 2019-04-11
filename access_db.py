@@ -94,16 +94,19 @@ class DB:
         col_names = np.array(schema)
         return col_names[:,1]
 
-    def get_worked_data(self):
+    def get_data_where(self,where):
         table = 'data'
         cur = self.db.cursor()
         cur.execute(
             '''SELECT * 
                FROM data 
-               WHERE text != '?' 
-               ORDER BY CAST(id AS INT)''')
+               WHERE {}
+               ORDER BY CAST(id AS INT)'''.format(where))
         col_names = self.get_column_names(table)
         return pd.DataFrame(cur.fetchall(), columns=col_names)
+
+    def get_worked_data(self):
+        return self.get_data_where("text != '?'")
 
         #print(
         #return unzip(cur.fetchall())
@@ -117,8 +120,12 @@ if __name__ == '__main__':
     rows = img_pathseq(incremental=False)
     print(*rows, sep='\n')
     '''
-    with DB('szmc.db') as db:
-        print(db.num_rows('work_state'))
+    with DB('tmp.db') as db:
+        print(db.get_work_state())
+        db.db.execute(
+            "UPDATE data SET text = '?' WHERE id = '2685';")
+
+
         '''
         db.update_data('1117000','H')
         db.update_work_state('incr','1254000')
