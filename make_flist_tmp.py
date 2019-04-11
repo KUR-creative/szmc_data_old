@@ -20,4 +20,24 @@ if __name__ == '__main__':
         )
         fpath_seq = process(cur.fetchall())
     with open('txt_HN_190411_nogif.flist','w') as f:
+        # for train
+        f.writelines(fpath_seq)
+
+    with DB(db_path) as db:
+        cur = db.db.cursor()
+        cur.execute('''
+            SELECT image.file_path
+            FROM data, image
+            WHERE data.id = image.id
+              and image.extension != 'gif'
+              and data.text = 'O'
+            ORDER BY CAST(data.id AS INT)
+        ''')
+        process = F.rcompose(
+            F.cat,
+            F.partial(F.map, lambda s: s+'\n'),
+        )
+        fpath_seq = process(cur.fetchall())
+    with open('txt_O_190411_nogif.flist','w') as f:
+        # for valid
         f.writelines(fpath_seq)
