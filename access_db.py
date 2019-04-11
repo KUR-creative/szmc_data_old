@@ -108,9 +108,19 @@ class DB:
     def get_worked_data(self):
         return self.get_data_where("text != '?'")
 
-        #print(
-        #return unzip(cur.fetchall())
-        #print(np.array(cur.fetchall()))
+    '''
+    def get_imgpaths_which(self, from_='data', where="data.text != '?'", 
+                           orderby='CAST(data.id AS INT)'): #'' means INCR
+        sql = #"""
+            SELECT * 
+            FROM {}
+            WHERE {}
+            ORDER BY {}
+        #""".format(from_, where, orderby)
+        cur = self.db.cursor()
+        cur.execute(sql)
+        return cur.fetchall()
+    '''
 
 if __name__ == '__main__':
     '''
@@ -122,8 +132,6 @@ if __name__ == '__main__':
     '''
     with DB('tmp.db') as db:
         print(db.get_work_state())
-        db.db.execute(
-            "UPDATE data SET text = '?' WHERE id = '2685';")
 
 
         '''
