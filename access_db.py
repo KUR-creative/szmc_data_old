@@ -1,6 +1,11 @@
 import sqlite3
 import numpy as np
+import pandas as pd
 from collections import namedtuple
+
+def unzip(zipped):
+    return zip(*zipped)
+
 OrderId = namedtuple('OrderId','order id')
 class DB:
     def __init__(self, db_path):
@@ -97,7 +102,12 @@ class DB:
                FROM data 
                WHERE text != '?' 
                ORDER BY CAST(id AS INT)''')
-        print(cur.fetchall())
+        col_names = self.get_column_names(table)
+        return pd.DataFrame(cur.fetchall(), columns=col_names)
+
+        #print(
+        #return unzip(cur.fetchall())
+        #print(np.array(cur.fetchall()))
 
 if __name__ == '__main__':
     '''
