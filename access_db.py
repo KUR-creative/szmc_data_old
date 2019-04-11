@@ -1,4 +1,5 @@
 import sqlite3
+import numpy as np
 from collections import namedtuple
 OrderId = namedtuple('OrderId','order id')
 class DB:
@@ -80,6 +81,23 @@ class DB:
         self.db.execute( "DELETE FROM {}" .format(table))
         assert self.num_rows(table) == 0, "Number of rows are not 0, something very weird happened! Notice it to db manager..."
         self.db.commit()
+
+    def get_column_names(self, table):
+        cur = self.db.cursor()
+        cur.execute('PRAGMA table_info({})'.format(table))
+        schema = cur.fetchall()
+        col_names = np.array(schema)
+        return col_names[:,1]
+
+    def get_worked_data(self):
+        table = 'data'
+        cur = self.db.cursor()
+        cur.execute(
+            '''SELECT * 
+               FROM data 
+               WHERE text != '?' 
+               ORDER BY CAST(id AS INT)''')
+        print(cur.fetchall())
 
 if __name__ == '__main__':
     '''
