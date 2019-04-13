@@ -1,3 +1,7 @@
+from PIL import Image
+Image.MAX_IMAGE_PIXELS = 1000000000 
+#NOTE:prevent DOS attack error raised from PIL
+from scipy import ndimage
 import imagesize
 from tqdm import tqdm
 from pymaybe import maybe
@@ -26,10 +30,15 @@ with DB('szmc.db') as db:
     ids = data['id']; paths = data['file_path']
     print(ids)
     print(paths)
+
+    #crop_coords = F.rcompose( F.partial(
     #images = F.map(wrap(cv2.imread, maybe), paths)
     #for im in images:
-    for imgpath in paths:
-        print(imagesize.get(imgpath))
+    imgs = F.map(lambda im: ndimage.imread(im), paths)
+    for i,img in enumerate(imgs):
+        print(img.shape,'{}/{}'.format(i,len(paths)))
+        #print(imagesize.get(imgpath))
+
     #for h,w,c in tqdm(F.map(lambda im: im.shape.or_else([0,0,0]), images)):
     #    h,w,c
 # get raw img paths from db
