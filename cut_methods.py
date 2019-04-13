@@ -1,6 +1,6 @@
 import funcy as F
 
-def cutseq(img_h,img_w, cut_h,cut_w):
+def crop_coordseq(img_h,img_w, cut_h,cut_w):
     assert cut_h <= img_h and cut_w <= img_w
     ys = [0] + [i*cut_h for i in range(1,img_h // cut_h)] + [img_h]
     xs = [0] + [i*cut_w for i in range(1,img_w // cut_w)] + [img_w]
@@ -12,7 +12,7 @@ import cv2
 import unittest
 class Test_make_trainalble(unittest.TestCase):
     def check_cut_method(self, img_h,img_w, cut_h,cut_w, expected):
-        cuts = list(cutseq(img_h,img_w, cut_h,cut_w))
+        cuts = list(crop_coordseq(img_h,img_w, cut_h,cut_w))
         self.assertEqual(cuts, expected)
         for y0,x0,y1,x1 in cuts:
             self.assertTrue(img_h - y0 >= cut_h, (img_h, y0, cut_h))
@@ -20,7 +20,7 @@ class Test_make_trainalble(unittest.TestCase):
     
     def check_no_small_piece(
         self, img_h,img_w, cut_h,cut_w, expected):
-        cuts = list(cutseq(img_h,img_w, cut_h,cut_w))
+        cuts = list(crop_coordseq(img_h,img_w, cut_h,cut_w))
         self.assertEqual(cuts, expected)
 
     def test_if_cut_hw_is_same_img_hw_then_no_cut(self):
@@ -88,7 +88,7 @@ class Test_make_trainalble(unittest.TestCase):
         img = cv2.imread('./fixtures/imgcut/1442000.jpg')
         ih,iw = img.shape[:2]
         print(ih,iw)
-        for y0,x0, y1,x1 in cutseq(ih,iw, 900,700):
+        for y0,x0, y1,x1 in crop_coordseq(ih,iw, 900,700):
             print('({:4d}, {:4d}, {:4d}, {:4d}),'.format(y0,x0, y1,x1))
             #print(y1 - y0, x1 - x0, 'x1', x1, 
                   #'iw - x0', iw - x0, 'iw - x1', iw - x1)
