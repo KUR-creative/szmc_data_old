@@ -72,7 +72,10 @@ def main():
     )( resized_hws )
     print(*crop_coords, sep='\n')
 
-    imgseq = fp.map(ndimage.imread, paths)
+    imgseq = fp.pipe(
+        fp.cmap(ndimage.imread), 
+        fp.cmap(lambda im: cv2.cvtColor(im, cv2.COLOR_RGB2BGR))
+    )(paths)
     resized_imgseq = fp.pipe(
         zip,
         fp.cmap(fp.tup(resize)),
