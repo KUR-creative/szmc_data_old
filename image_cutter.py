@@ -77,6 +77,7 @@ def main():
         fp.cmap(ndimage.imread), 
         fp.cmap(lambda im: cv2.cvtColor(im, cv2.COLOR_RGB2BGR))
     )(paths)
+
     resized_imgseq = fp.pipe(
         zip,
         fp.cmap(fp.tup(resize)),
@@ -94,17 +95,22 @@ def main():
 
     dst_paths = fp.pipe(
         zip,
-        fp.clmap(fp.tup(dst_path)),
+        fp.cmap(fp.tup(dst_path)),
+        fp.clmap(str),
     )( fp.cat(repeated_pathseq), *fp.unzip(y0x0y1x1s) )
 
-    for im,path in zip(cropseq,dst_paths):
-        h,w = im.shape[:2]
-        assert h >= min_h and w >= min_w
-        print(path, im.shape)
-        cv2.imshow('im',im); cv2.waitKey(0)
     '''
+    for img,path in tqdm(zip(cropseq,dst_paths), total=len(dst_paths)):
+        h,w = img.shape[:2]
+        assert h >= min_h and w >= min_w
+        print(path, img.shape)
+        cv2.imwrite(path, img)
     '''
 
+    dic = fp.zipdict(dst_paths, fp.into(list)(y0x0y1x1s))
+    with open('190414cropping.json', 'w', encoding='utf-8') as f:
+        json.dump(dic, f)
+    
 
 if __name__ == '__main__':
     main()
