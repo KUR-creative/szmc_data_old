@@ -40,22 +40,21 @@ def resize(img, h, w):
 
 def main():
     data = id_paths('szmc.db')
-    ids = data['id']; paths = data['file_path']#[:10]
+    ids = data['id'][:10] 
+    paths = data['file_path'][:10]
     min_w = 256
     min_h = 256
     cut_w = 900 
     cut_h = 1200
 
-    num_img = len(data['id'])
+    num_img = len(paths)
     resized_hws = fp.pipe( 
         fp.cmap( lambda im:imagesize.get(im) ),
         fp.cmap( lambda wh: (wh[1],wh[0], cut_h,cut_w, min_h,min_w) ),
         fp.partial( tqdm, total=num_img, desc='make resized h,w list' ),
         fp.clmap( fp.tup(hw_for_cutting) ),
     )( paths )
-    print(*resized_hws, sep='\n')
-    #print(resized_hws)
-    print(list(fp.unzip(resized_hws)))
+    #print(*resized_hws, sep='\n')
 
     crop_coords = fp.pipe(
         fp.cmap( lambda hw: (hw[0],hw[1], cut_h,cut_w) ),
@@ -72,10 +71,20 @@ def main():
         fp.cmap(fp.tup(resize)),
     )( imgseq, resized_hseq, resized_wseq )
     
-    for im in resized_imgseq:
+
+    num_crops = fp.lmap(len, crop_coords)
+    repeated_idseq = repeat_each(ids, num_crops)
+    repeated_imgseq = repeat_each(resized_imgseq, num_crops)
+    print(num_crops)
+    print(list(ids))
+    print(*repeated_idseq)
+        
+    for im in fp.flatten(repeated_imgseq):
         h,w = im.shape[:2]
         assert h >= min_h and w >= min_w
-        print(im.shape)
+        #print(im.shape)
+        cv2.imshow('im',im); cv2.waitKey(0)
+
     #images = F.map(wrap(cv2.imread, maybe), paths)
     #for im in images:
     #imgs = F.map(lambda im: ndimage.imread(im), paths)

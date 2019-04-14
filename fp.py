@@ -17,11 +17,15 @@ curry = F.curry
 tap = F.tap
 flatten = F.flatten
 pipe = F.rcompose
+
 map = F.map
-repeat = F.repeat
+lmap = F.lmap
 cmap = F.curry(F.map)
 clmap = F.curry(F.lmap)
+
+repeat = F.repeat
 tup = lambda f: lambda argtup: f(*argtup)
+
 into = lambda f: lambda xs: F.walk(f, xs)
 ginto = lambda f: lambda xs: map(f, xs)
 linto = lambda f: lambda xs: list(map(f, xs))
