@@ -10,7 +10,7 @@ def crop_coordseq(img_h,img_w, cut_h,cut_w):
 
 import cv2
 import unittest
-class Test_make_trainalble(unittest.TestCase):
+class Test_crop_coordseq(unittest.TestCase):
     def check_cut_method(self, img_h,img_w, cut_h,cut_w, expected):
         cuts = list(crop_coordseq(img_h,img_w, cut_h,cut_w))
         self.assertEqual(cuts, expected)
