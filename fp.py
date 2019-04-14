@@ -7,7 +7,18 @@ def wrap(f, wrapper):
         return wrapper(f(*args,**kargs))
     return wrapped
 
+def unzip(zipped):
+    return zip(*zipped)
+
+flip = lambda f: lambda *args,**kargs: f(*reversed(args),**kargs)
+
+partial = F.partial
+curry = F.curry
+tap = F.tap
+flatten = F.flatten
 pipe = F.rcompose
+map = F.map
+repeat = F.repeat
 cmap = F.curry(F.map)
 clmap = F.curry(F.lmap)
 tup = lambda f: lambda argtup: f(*argtup)
