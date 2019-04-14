@@ -8,7 +8,6 @@ from pymaybe import maybe
 import cv2
 from pathlib import PurePosixPath
 import json
-#import funcy as F
 
 import fp
 from cut_methods import crop_coordseq, resize_to_cut
@@ -28,7 +27,6 @@ def cut(img, y0,x0, y1,x1):
     return img[y0:y1, x0:x1]
 
 def hw_for_cutting(img_h,img_w, cut_h,cut_w, min_cut_h,min_cut_w):
-    #print(N, '/', 5277); N += 1
     if img_h < min_cut_h or img_w < min_cut_w:
         return resize_to_cut(img_h,img_w, min_cut_h,min_cut_w)
     return img_h,img_w
@@ -48,13 +46,13 @@ def dst_path(pathstr, y0,x0, y1,x1):
 
 def main():
     data = id_paths('szmc.db')
-    ids = data['id'][:30] 
-    paths = data['file_path'][:30]
+    ids = data['id']#[:30] 
+    paths = data['file_path']#[:30]
     min_h = 256
     min_w = 256
     cut_h = 1200 #800
     cut_w = 900 
-    print(*paths, sep='\n')
+    #print(*paths, sep='\n')
 
     num_img = len(paths)
     resized_hws = fp.pipe( 
@@ -71,7 +69,7 @@ def main():
         fp.cmap( fp.tup(crop_coordseq) ),
         fp.linto(list),
     )( resized_hws )
-    print(*crop_coords, sep='\n')
+    #print(*crop_coords, sep='\n')
 
     imgseq = fp.pipe(
         fp.cmap(ndimage.imread), 
@@ -99,13 +97,12 @@ def main():
         fp.clmap(str),
     )( fp.cat(repeated_pathseq), *fp.unzip(y0x0y1x1s) )
 
-    '''
-    for img,path in tqdm(zip(cropseq,dst_paths), total=len(dst_paths)):
+    for img,path in tqdm(zip(cropseq,dst_paths), 
+                         total=len(dst_paths), desc='save images'):
         h,w = img.shape[:2]
         assert h >= min_h and w >= min_w
-        print(path, img.shape)
+        #print(path, img.shape)
         cv2.imwrite(path, img)
-    '''
 
     dic = fp.zipdict(dst_paths, fp.into(list)(y0x0y1x1s))
     with open('190414cropping.json', 'w', encoding='utf-8') as f:
@@ -114,13 +111,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-        #print(imagesize.get(imgpath))
-
-    #for h,w,c in tqdm(F.map(lambda im: im.shape.or_else([0,0,0]), images)):
-    #    h,w,c
-# get raw img paths from db
-# load from directories
-# rgb->bgr
-# resize
-# flatmap(cut)
