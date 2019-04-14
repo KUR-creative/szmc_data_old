@@ -1,12 +1,12 @@
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1000000000 
 #NOTE:prevent DOS attack error raised from PIL
-from scipy import ndimage
 import imagesize
-from tqdm import tqdm
-from pymaybe import maybe
+import imageio
 import cv2
+
 from pathlib import PurePosixPath
+from tqdm import tqdm
 import json
 
 import fp
@@ -46,12 +46,14 @@ def dst_path(pathstr, y0,x0, y1,x1):
 
 def main():
     data = id_paths('szmc.db')
-    ids = data['id']#[:30] 
-    paths = data['file_path']#[:30]
+    ids = data['id']#[:30]#[523:700] 
+    paths = data['file_path']#[:30]#[523:700]
     min_h = 256
     min_w = 256
     cut_h = 1200 #800
     cut_w = 900 
+
+    #print(ids[0:1])
     #print(*paths, sep='\n')
 
     num_img = len(paths)
@@ -72,8 +74,9 @@ def main():
     #print(*crop_coords, sep='\n')
 
     imgseq = fp.pipe(
-        fp.cmap(ndimage.imread), 
-        fp.cmap(lambda im: cv2.cvtColor(im, cv2.COLOR_RGB2BGR))
+        fp.cmap(imageio.imread), 
+        fp.partial( tqdm, total=num_img, desc='loading images... ' ),
+        #fp.cmap(lambda im: cv2.cvtColor(im, cv2.COLOR_RGB2BGR))
     )(paths)
 
     resized_imgseq = fp.pipe(
@@ -94,6 +97,7 @@ def main():
     dst_paths = fp.pipe(
         zip,
         fp.cmap(fp.tup(dst_path)),
+        #fp.partial( tqdm, total=num_img, desc='make destination paths' ),
         fp.clmap(str),
     )( fp.cat(repeated_pathseq), *fp.unzip(y0x0y1x1s) )
 
@@ -102,7 +106,8 @@ def main():
         h,w = img.shape[:2]
         assert h >= min_h and w >= min_w
         #print(path, img.shape)
-        cv2.imwrite(path, img)
+        #cv2.imwrite(path, img)
+        imageio.imwrite(path, img)
 
     dic = fp.zipdict(dst_paths, fp.into(list)(y0x0y1x1s))
     with open('190414cropping.json', 'w', encoding='utf-8') as f:
