@@ -8,7 +8,9 @@ def wrap(f, wrapper):
     return wrapped
 
 pipe = F.rcompose
-cmap = curry(F.map)
-clmap = curry(F.lmap)
+cmap = F.curry(F.map)
+clmap = F.curry(F.lmap)
 tup = lambda f: lambda argtup: f(*argtup)
-into = lambda f: lambda xs: walk(f, xs)
+into = lambda f: lambda xs: F.walk(f, xs)
+ginto = lambda f: lambda xs: map(f, xs)
+linto = lambda f: lambda xs: list(map(f, xs))
