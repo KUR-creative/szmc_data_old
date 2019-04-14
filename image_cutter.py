@@ -50,9 +50,9 @@ def main():
     resized_hws = fp.pipe( 
         fp.cmap( lambda im:imagesize.get(im) ),
         fp.cmap( lambda wh: (wh[1],wh[0], cut_h,cut_w, min_h,min_w) ),
-        fp.partial( tqdm, total=num_img ),
+        fp.partial( tqdm, total=num_img, desc='make resized h,w list' ),
         fp.clmap( fp.tup(hw_for_cutting) ),
-    )(paths)
+    )( paths )
     print(*resized_hws, sep='\n')
     #print(resized_hws)
     print(list(fp.unzip(resized_hws)))
@@ -62,7 +62,7 @@ def main():
         fp.cmap( fp.tup(hw2crop_coord_args) ),
         fp.cmap( fp.tup(crop_coordseq) ),
         fp.linto(list),
-    )(resized_hws)
+    )( resized_hws )
     print(*crop_coords, sep='\n')
 
     imgseq = fp.map(ndimage.imread, paths)
