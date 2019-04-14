@@ -1,5 +1,8 @@
 import funcy as F
 
+def resize_to_cut(img_h,img_w, cut_h,cut_w):
+    return 20,40
+
 def crop_coordseq(img_h,img_w, cut_h,cut_w):
     assert cut_h <= img_h and cut_w <= img_w
     ys = [0] + [i*cut_h for i in range(1,img_h // cut_h)] + [img_h]
@@ -10,6 +13,13 @@ def crop_coordseq(img_h,img_w, cut_h,cut_w):
 
 import cv2
 import unittest
+class Test_resize_to_cut(unittest.TestCase):
+    def check_resize_to_cut(self, img_h,img_w, cut_h,cut_w, expected):
+        self.assertEqual(resize_to_cut(img_h,img_w, cut_h,cut_w), 
+                         expected)
+    def test(self):
+        self.check_resize_to_cut(10,20, 20,10, (20,40))
+
 class Test_crop_coordseq(unittest.TestCase):
     def check_cut_method(self, img_h,img_w, cut_h,cut_w, expected):
         cuts = list(crop_coordseq(img_h,img_w, cut_h,cut_w))
@@ -83,7 +93,7 @@ class Test_crop_coordseq(unittest.TestCase):
             (1800, 1400, 2819, 2310),
         ])
             
-    #@unittest.skip('later')
+    @unittest.skip('later')
     def test_real_img(self):
         img = cv2.imread('./fixtures/imgcut/1442000.jpg')
         ih,iw = img.shape[:2]
