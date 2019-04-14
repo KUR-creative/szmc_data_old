@@ -1,7 +1,11 @@
+from scipy import ndimage
 import funcy as F
+import fp
 
 def resize_to_cut(img_h,img_w, cut_h,cut_w):
-    return 20,40
+    ratio = max(cut_h / img_h, cut_w / img_w) 
+    ratio = 1 if ratio <= 1 else ratio
+    return fp.into(int)( (img_h*ratio, img_w*ratio) ) 
 
 def crop_coordseq(img_h,img_w, cut_h,cut_w):
     assert cut_h <= img_h and cut_w <= img_w
@@ -14,11 +18,23 @@ def crop_coordseq(img_h,img_w, cut_h,cut_w):
 import cv2
 import unittest
 class Test_resize_to_cut(unittest.TestCase):
-    def check_resize_to_cut(self, img_h,img_w, cut_h,cut_w, expected):
+    def check_resize_to_cut(self, img_h,img_w, cut_h,cut_w, 
+                            expected, msg=None):
         self.assertEqual(resize_to_cut(img_h,img_w, cut_h,cut_w), 
-                         expected)
+                         expected, msg)
     def test(self):
-        self.check_resize_to_cut(10,20, 20,10, (20,40))
+        self.check_resize_to_cut(10,20, 5,10,  (10,20), 'do not resize')
+
+        self.check_resize_to_cut(10,20, 20,10, (20,40), 'ch / ih > 1')
+        self.check_resize_to_cut(10,30, 20,10, (20,60), 'ch / ih > 1')
+
+        self.check_resize_to_cut(20,10, 10,20, (40,20), 'cw / iw > 1')
+        self.check_resize_to_cut(30,10, 10,20, (60,20), 'cw / iw > 1')
+
+        self.check_resize_to_cut(40,10, 60,30, (120,30), 
+            'ch / ih = 1.5 AND cw / iw = 3.0 THEN return 3x: w')
+        self.check_resize_to_cut(10,40, 30,60, (30,120), 
+            'ch / ih = 3.0 AND cw / iw = 1.5 THEN return 3x: h')
 
 class Test_crop_coordseq(unittest.TestCase):
     def check_cut_method(self, img_h,img_w, cut_h,cut_w, expected):
@@ -99,6 +115,20 @@ class Test_crop_coordseq(unittest.TestCase):
         ih,iw = img.shape[:2]
         print(ih,iw)
         for y0,x0, y1,x1 in crop_coordseq(ih,iw, 900,700):
+            print('({:4d}, {:4d}, {:4d}, {:4d}),'.format(y0,x0, y1,x1))
+            #print(y1 - y0, x1 - x0, 'x1', x1, 
+                  #'iw - x0', iw - x0, 'iw - x1', iw - x1)
+            cv2.imshow('cut', img[y0:y1, x0:x1])
+            cv2.waitKey(0)
+
+    def test_real_img_resize_and_cut(self):
+        img = ndimage.imread('./fixtures/imgcut/long/119020.gif')
+        cut_h,cut_w = 900,700
+        ih,iw = resize_to_cut(*img.shape[:2], cut_h,cut_w)
+        img = cv2.resize(img, (iw,ih))
+        
+        print(ih,iw)
+        for y0,x0, y1,x1 in crop_coordseq(ih,iw, cut_h,cut_w):
             print('({:4d}, {:4d}, {:4d}, {:4d}),'.format(y0,x0, y1,x1))
             #print(y1 - y0, x1 - x0, 'x1', x1, 
                   #'iw - x0', iw - x0, 'iw - x1', iw - x1)
