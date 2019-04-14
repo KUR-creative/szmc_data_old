@@ -39,6 +39,12 @@ def hw2crop_coord_args(h,w, desired_cut_h, desired_cut_w):
 def resize(img, h, w):
     return cv2.resize(img, (w,h))
 
+from pathlib import Path
+def dst_path(pathstr, y0,x0, y1,x1):
+    path = Path(pathstr)
+    fname = path.stem + '_{}_{}.png'.format(y0,x0)
+    return path.parent / fname
+
 def main():
     data = id_paths('szmc.db')
     ids = data['id'][:30] 
@@ -47,6 +53,7 @@ def main():
     min_w = 256
     cut_h = 1200 #800
     cut_w = 900 
+    print(*paths, sep='\n')
 
     num_img = len(paths)
     resized_hws = fp.pipe( 
@@ -71,49 +78,28 @@ def main():
         fp.cmap(fp.tup(resize)),
     )( imgseq, *fp.unzip(resized_hws) )
     
-
     num_crops = fp.lmap(len, crop_coords)
-    repeated_idseq = repeat_each(ids, num_crops)
+    repeated_pathseq = repeat_each(paths, num_crops)
     repeated_imgseq = repeat_each(resized_imgseq, num_crops)
-    #print(num_crops)
-    #print(list(ids))
-    #print(*repeated_idseq)
-        
+
     y0x0y1x1s = fp.lcat(crop_coords)
-    '''
-    print('crop_coords', crop_coords)
-    print('y0x0y1x1s', y0x0y1x1s)
-    repeated_ids = fp.lcat(repeated_idseq) 
-    print('repeated_ids', repeated_ids)
-    assert len(y0x0y1x1s) == len(repeated_ids)
-    assert len(y0x0y1x1s) == len(fp.lcat(repeated_imgseq))
-    '''
     cropseq = fp.pipe(
         zip,
         fp.cmap(fp.tup(cut)),
     )( fp.cat(repeated_imgseq), *fp.unzip(y0x0y1x1s) )
 
-    for im in cropseq:
+    dst_paths = fp.pipe(
+        zip,
+        fp.clmap(fp.tup(dst_path)),
+    )( fp.cat(repeated_pathseq), *fp.unzip(y0x0y1x1s) )
+
+    for im,path in zip(cropseq,dst_paths):
         h,w = im.shape[:2]
         assert h >= min_h and w >= min_w
-        print(im.shape)
+        print(path, im.shape)
         cv2.imshow('im',im); cv2.waitKey(0)
     '''
-
-    #fp.map(fp.tup(cut), repeated_imgseq)
-    for im in fp.flatten(repeated_imgseq):
-        h,w = im.shape[:2]
-        assert h >= min_h and w >= min_w
-        #print(im.shape)
-        cv2.imshow('im',im); cv2.waitKey(0)
     '''
-
-    #images = F.map(wrap(cv2.imread, maybe), paths)
-    #for im in images:
-    #imgs = F.map(lambda im: ndimage.imread(im), paths)
-    #for i,img in enumerate(imgs):
-    #    print(img.shape,'{}/{}'.format(i,len(paths)))
-
 
 
 if __name__ == '__main__':
