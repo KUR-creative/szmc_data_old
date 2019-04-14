@@ -6,6 +6,8 @@ import imagesize
 from tqdm import tqdm
 from pymaybe import maybe
 import cv2
+from pathlib import PurePosixPath
+import json
 #import funcy as F
 
 import fp
@@ -39,9 +41,8 @@ def hw2crop_coord_args(h,w, desired_cut_h, desired_cut_w):
 def resize(img, h, w):
     return cv2.resize(img, (w,h))
 
-from pathlib import Path
 def dst_path(pathstr, y0,x0, y1,x1):
-    path = Path(pathstr)
+    path = PurePosixPath(pathstr)
     fname = path.stem + '_{}_{}.png'.format(y0,x0)
     return path.parent / fname
 
