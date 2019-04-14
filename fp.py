@@ -15,7 +15,13 @@ flip = lambda f: lambda *args,**kargs: f(*reversed(args),**kargs)
 partial = F.partial
 curry = F.curry
 tap = F.tap
+
 flatten = F.flatten
+lflatten = F.lflatten
+cat = F.cat
+lcat = F.lcat
+
+ilen = F.ilen
 pipe = F.rcompose
 
 map = F.map

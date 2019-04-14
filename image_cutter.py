@@ -22,9 +22,10 @@ repeat_each = fp.pipe(
     fp.linto(list)
 )
 
-N = 0
+def cut(img, y0,x0, y1,x1):
+    return img[y0:y1, x0:x1]
+
 def hw_for_cutting(img_h,img_w, cut_h,cut_w, min_cut_h,min_cut_w):
-    global N
     #print(N, '/', 5277); N += 1
     if img_h < min_cut_h or img_w < min_cut_w:
         return resize_to_cut(img_h,img_w, min_cut_h,min_cut_w)
@@ -75,15 +76,29 @@ def main():
     num_crops = fp.lmap(len, crop_coords)
     repeated_idseq = repeat_each(ids, num_crops)
     repeated_imgseq = repeat_each(resized_imgseq, num_crops)
-    print(num_crops)
-    print(list(ids))
-    print(*repeated_idseq)
+    #print(num_crops)
+    #print(list(ids))
+    #print(*repeated_idseq)
         
+    y0x0y1x1s = fp.lcat(crop_coords)
+    print('crop_coords', crop_coords)
+    print('y0x0y1x1s', y0x0y1x1s)
+    repeated_ids = fp.lcat(repeated_idseq) 
+    print('repeated_ids', repeated_ids)
+    assert len(y0x0y1x1s) == len(repeated_ids)
+    assert len(y0x0y1x1s) == len(fp.lcat(repeated_imgseq))
+    '''
+    cropseq = fp.pipe(
+        zip,
+    )( fp.flatten(repeated_imgseq), 
+
+    #fp.map(fp.tup(cut), repeated_imgseq)
     for im in fp.flatten(repeated_imgseq):
         h,w = im.shape[:2]
         assert h >= min_h and w >= min_w
         #print(im.shape)
         cv2.imshow('im',im); cv2.waitKey(0)
+    '''
 
     #images = F.map(wrap(cv2.imread, maybe), paths)
     #for im in images:
