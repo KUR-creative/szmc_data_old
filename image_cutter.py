@@ -24,7 +24,7 @@ def id_paths(db_path, is_valid=False):
 repeat_each = fp.pipe(
     zip, 
     fp.cmap(fp.tup(fp.repeat)),
-    fp.linto(list)
+    #fp.linto(list)
 )
 
 def cut(img, y0,x0, y1,x1):
