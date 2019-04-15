@@ -6,6 +6,12 @@ import sys
 src_json = sys.argv[1] # json created from image_cutter #'./190414cropping.json' 
 dst_flist= sys.argv[2] # dataset flist file #'HN_190414_valid.flist' 
 
+# src_json structure:
+# { 'img_path1':metadata1, 
+#   'img_path2':metadata2, 
+#   ...
+#   'img_pathN':metadataN, }
+
 with open(src_json) as f:
     dic = json.load(f)
 
