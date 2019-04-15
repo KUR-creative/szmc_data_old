@@ -15,6 +15,7 @@ def foreach(f, seq):
     for elem in seq:
         f(elem)
 
+
 first = F.first
 partial = F.partial
 curry = F.curry
@@ -28,6 +29,8 @@ lcat = F.lcat
 ilen = F.ilen
 pipe = F.rcompose
 
+walk = F.walk
+cwalk = F.curry(F.walk)
 map = F.map
 lmap = F.lmap
 cmap = F.curry(F.map)
@@ -36,6 +39,8 @@ clmap = F.curry(F.lmap)
 repeat = F.repeat
 
 zipdict = F.zipdict
+cmerge_with = F.curry(F.merge_with)
+merge = F.merge
 
 tup = lambda f: lambda argtup: f(*argtup)
 into = lambda f: lambda xs: F.walk(f, xs)
