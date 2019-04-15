@@ -1,0 +1,14 @@
+db_NH_190414.json: [text = Half or Not-easy] img paths and metadata :190414ver
+db_O_190414.json:  [text = nO text]          img paths and metadata :190414ver
+db_fmd_cleans190414.flist:  db_O_190414.json + clean_fmd_comics190415.json and shuffled
+
+./clean_fmd_comics190415/ 
+    clean_fmd_comics190415.json: old cleaned fmd comics(7624 images)
+
+./trainNH_validO_190414/ 
+    190414crops_train.flist: <- shuffle <- db_NH_190414.json
+    190414crops_valid.flist: <- shuffle <- db_O_190414.json
+
+./uno_train_cleans190415/
+    db_fmd_cleans190414_train.flist: first 20 % of db_fmd_cleans190414.flist
+    db_fmd_cleans190414_valid.flist:  last 80 % of db_fmd_cleans190414.flist
