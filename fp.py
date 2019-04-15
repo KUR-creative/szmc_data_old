@@ -10,6 +10,12 @@ def wrap(f, wrapper):
 def unzip(zipped):
     return zip(*zipped)
 
+@F.curry
+def foreach(f, seq):
+    for elem in seq:
+        f(elem)
+
+first = F.first
 partial = F.partial
 curry = F.curry
 tap = F.tap
