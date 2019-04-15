@@ -4,6 +4,7 @@ Image.MAX_IMAGE_PIXELS = 1000000000
 import imagesize
 import imageio
 import cv2
+import sys
 
 from pathlib import PurePosixPath
 from tqdm import tqdm
@@ -13,9 +14,12 @@ import fp
 from cut_methods import crop_coordseq, resize_to_cut
 from access_db import DB
 
-def id_paths(db_path):
+def id_paths(db_path, is_valid=False):
     with DB(db_path) as db:
-        return db.unparted_raw_img_paths()
+        if is_valid:
+            return db.unparted_raw_img_paths_valid() 
+        else:
+            return db.unparted_raw_img_paths() # train
 
 repeat_each = fp.pipe(
     zip, 
@@ -45,14 +49,17 @@ def dst_path(pathstr, y0,x0, y1,x1):
     return path.parent / fname
 
 def main():
-    data = id_paths('szmc.db')
-    ids = data['id']#[:30]#[523:700] 
-    paths = data['file_path']#[:30]#[523:700]
-    min_h = 256
-    min_w = 256
+    json_path = sys.argv[1] #'190414crops_train.json' #'190414crops_valid.json'
+    is_valid = (sys.argv[2] == 'valid')
+    data = id_paths('szmc.db', is_valid)
+    ids = data['id']#[3742:]#[:30]#[523:700] 
+    paths = data['file_path']#[3742:]#[:30]#[523:700]
+    min_h = 300
+    min_w = 300
     cut_h = 1200 #800
     cut_w = 900 
 
+    #print(ids)
     #print(ids[0:1])
     #print(*paths, sep='\n')
 
@@ -110,7 +117,7 @@ def main():
         imageio.imwrite(path, img)
 
     dic = fp.zipdict(dst_paths, fp.into(list)(y0x0y1x1s))
-    with open('190414cropping.json', 'w', encoding='utf-8') as f:
+    with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(dic, f)
     
 
