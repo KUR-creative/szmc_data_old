@@ -1,3 +1,7 @@
+!!!!!! CAUTION !!!!!!
+files in dataset is VERY IMPORTANT!
+DO NOT REMOVE THIS!
+
  :NOTE:
 for image loading, PIL(Pillow) 6.0.0 needed
 for training gan, use cmd: export LD_LIBRARY_PATH=/opt/cuda/lib64  (pacman bug)
