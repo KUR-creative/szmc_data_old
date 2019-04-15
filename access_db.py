@@ -134,6 +134,18 @@ class DB:
         ''')
         return pd.DataFrame(cur.fetchall(), columns=['id','file_path'])
 
+    def unparted_raw_img_paths_valid(self):
+        #TODO: add 'parted(0/1)' column..
+        cur = self.db.cursor()
+        cur.execute('''
+            SELECT data.id,image.file_path
+            FROM data, image
+            WHERE data.id = image.id
+              and data.text = 'O'
+            ORDER BY CAST(data.id AS INT)
+        ''')
+        return pd.DataFrame(cur.fetchall(), columns=['id','file_path'])
+
 if __name__ == '__main__':
     '''
     rows = img_pathseq()
