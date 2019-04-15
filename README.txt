@@ -1,5 +1,5 @@
 !!!!!! CAUTION !!!!!!
-files in dataset is VERY IMPORTANT!
+files in dataset are VERY IMPORTANT!
 DO NOT REMOVE THIS!
 
  :NOTE:
