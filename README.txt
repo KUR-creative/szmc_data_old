@@ -1,3 +1,14 @@
+ [dataset directory]
+
+image directory:
+    danbooru_raw
+    snet_data
+    clean_fmd_comics
+
+metadatas:
+    dataset
+
+
 !!!!!! CAUTION !!!!!!
 files in dataset are VERY IMPORTANT!
 DO NOT REMOVE THIS!
