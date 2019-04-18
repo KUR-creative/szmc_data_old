@@ -1,23 +1,13 @@
 import os
 import re
-from collections import namedtuple
-
-def filename_ext(path):
-    name_ext = namedtuple('name_ext','name ext')
-    return name_ext( *os.path.splitext(os.path.basename(path)) )
-
-def filename(path):
-    return filename_ext(path).name
-
-def extension(path):
-    return filename_ext(path).ext
+from pathlib import PurePosixPath
 
 def file_pathseq(root_dirpath):
     ''' generate file path sequence of directory_path ''' 
     it = os.walk(root_dirpath)
     for root,dirs,files in it:
-        for path in map(lambda name:os.path.join(root,name),files):
-            yield path
+        for path in map(lambda name:PurePosixPath(root) / name,files):
+            yield str(path)
 
 def human_sorted(iterable):
     ''' Sorts the given iterable in the way that is expected. '''

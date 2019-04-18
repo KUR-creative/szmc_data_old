@@ -24,6 +24,7 @@ plus = lambda a,b: a+b
 sub1 = lambda x: x - 1
 
 first = F.first
+nth = F.nth
 remove = F.remove
 lremove = F.lremove
 cremove = F.curry(F.remove)
