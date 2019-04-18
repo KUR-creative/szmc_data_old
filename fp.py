@@ -18,20 +18,28 @@ def foreach(f, seq):
 permutations = itertools.permutations
 lpermutations = lambda seq: list(itertools.permutations(seq))
 
+
+curry = F.curry
+rcurry = F.rcurry
+partial = F.partial
+rpartial = F.rpartial
+
 reduce = functools.reduce
 #creduce = F.curry(functools.reduce) # cannot curry reduce,,,??? it's impl issue!!
 plus = lambda a,b: a+b
+equals = lambda a,b: a == b 
 sub1 = lambda x: x - 1
 
 first = F.first
 nth = F.nth
+cnth = F.curry(F.nth)
 remove = F.remove
 lremove = F.lremove
 cremove = F.curry(F.remove)
 clremove = F.curry(F.lremove)
 
-partial = F.partial
-curry = F.curry
+ckeep = F.curry(F.keep)
+
 tap = F.tap
 #ctap = F.curry(F.tap) #TODO
 
@@ -53,6 +61,7 @@ map = F.map
 lmap = F.lmap
 cmap = F.curry(F.map)
 clmap = F.curry(F.lmap)
+cfilter = F.curry(F.filter)
 
 cmapcat = F.curry(F.mapcat)
 
@@ -69,3 +78,6 @@ into = lambda f: lambda xs: F.walk(f, xs)
 ginto = lambda f: lambda xs: map(f, xs)
 linto = lambda f: lambda xs: list(map(f, xs))
 flip = lambda f: lambda *args,**kargs: f(*reversed(args),**kargs)
+
+def nths(seq, idxs):
+    return map( rcurry(nth)(unzip(seq)), idxs ) 
