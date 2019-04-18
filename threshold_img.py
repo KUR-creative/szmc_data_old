@@ -13,6 +13,7 @@ def imtap(im, wait=True, title='im'):
     return im
 
 label_dirs = ['./snet_data/label_rbk', './snet_data/label_wk']
+#label_dirs = ['./snet_data/clean_rbk', './snet_data/clean_wk']
 dst_dirs = ['./snet_data/clean_rbk', './snet_data/clean_wk']
 
 threshold = 127
