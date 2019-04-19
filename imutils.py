@@ -1,3 +1,4 @@
+import cv2
 import numpy as np
 def to_categorical(y, num_classes=None, dtype='float32'):
     """Converts a class vector (integers) to binary class matrix.
@@ -80,3 +81,60 @@ def decategorize(categorized, origin_map):
                 if np.alltrue(categorized[y,x] == category):
                     ret_img[y,x] = origin
     return ret_img
+
+def shape3ch(img3ch):
+    assert len(img3ch.shape) == 3
+    h,w,c = img3ch.shape
+    assert c == 3
+    return h,w,c
+
+def num_unique_colors(img3ch):
+    h,w,c = shape3ch(img3ch)
+
+    uniques,counts = np.unique(
+        img3ch.reshape((h*w, c)), # flatten to 2d arr
+        axis=0, return_counts=True
+    )
+    return uniques,counts
+
+def into2ch(img):
+    shape = img.shape
+    if len(shape) == 3:
+        h,w,c = shape3ch(img)
+        return img.reshape((h*w, c))# flatten to 2d arr
+    elif len(shape) == 2:
+        assert shape[-1] == 3 # rgb or bgr
+        return img
+    else:
+        raise ValueError('unexpected shape of img')
+
+
+def has_color(img, color) -> bool:
+    if img.shape == 3:
+        h,w,c = shape3ch(img)
+        im = img.reshape((h*w, c)),# flatten to 2d arr
+    else:
+        im = img
+
+    return any(map( lambda v: all(v == color), im ))
+
+def is_consist_of(img, colors) -> bool:
+    colorset = lambda image: set(map(tuple,image))
+    im = into2ch(img) # [rgb, rgb, rgb, ...] or bgr..
+    return colorset(im) <= colorset(colors)
+
+
+import unittest
+class Test(unittest.TestCase):
+    def test_is_consist_of(self):
+        img = cv2.imread('snet_data/clean_rbk/180909_Soul Eater Not!_Chapter 028 - Raw_019.png')
+        print(is_consist_of(
+            img, [[0,0,255], [255,0,0], [0,0,0]]
+        ))
+        print(is_consist_of(
+            num_unique_colors(img)[0],
+            [[0,0,255], [255,0,0], [0,0,0]]
+        ))
+
+if __name__ == '__main__':
+    unittest.main()
