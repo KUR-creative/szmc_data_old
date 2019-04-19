@@ -31,14 +31,18 @@ equals = lambda a,b: a == b
 sub1 = lambda x: x - 1
 
 first = F.first
+second = F.second
 nth = F.nth
+
 cnth = F.curry(F.nth)
 remove = F.remove
 lremove = F.lremove
 cremove = F.curry(F.remove)
 clremove = F.curry(F.lremove)
 
-ckeep = F.curry(F.keep)
+#ckeep = F.curry(F.keep) # doesn't work!!!
+# use partial..
+keep = F.keep
 
 tap = F.tap
 #ctap = F.curry(F.tap) #TODO
@@ -79,5 +83,23 @@ ginto = lambda f: lambda xs: map(f, xs)
 linto = lambda f: lambda xs: list(map(f, xs))
 flip = lambda f: lambda *args,**kargs: f(*reversed(args),**kargs)
 
+idx_enum = F.first
+val_enum = F.second
+negate = lambda x: (not x)
+def negated(predicate) -> bool:
+    return wrap(predicate, negate)
+
 def nths(seq, idxs):
     return map( rcurry(nth)(unzip(seq)), idxs ) 
+
+import unittest
+class Test_fp(unittest.TestCase):
+    def test_negated(self):
+        pred = lambda x: x != 1
+        self.assertEqual( pred(1), negated(negated(pred))(1) )
+        self.assertEqual( pred(0), negated(negated(pred))(0) )
+        self.assertNotEqual( pred(1), negated(pred)(1) )
+        self.assertNotEqual( pred(0), negated(pred)(0) )
+
+if __name__ == '__main__':
+    unittest.main()
