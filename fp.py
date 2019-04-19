@@ -11,6 +11,9 @@ def wrap(f, wrapper):
 def unzip(zipped):
     return zip(*zipped)
 
+def lunzip(zipped):
+    return list(zip(*zipped))
+
 @F.curry
 def foreach(f, seq):
     for elem in seq:
@@ -33,8 +36,25 @@ sub1 = lambda x: x - 1
 first = F.first
 second = F.second
 nth = F.nth
-
 cnth = F.curry(F.nth)
+
+'''
+import types
+import inspect
+def is_generator(seq):
+    return (isinstance(seq, types.GeneratorType)
+         or inspect(isgeneratorfunction(seq)))
+'''
+
+def list_nths(idxs, li):
+    #print(idxs)
+    #seq = F.tap(list(seq)[:10], label='seq')
+    assert (  isinstance(li, list) 
+           or isinstance(li,  str) 
+           or isinstance(li,tuple))
+    return map( rcurry(nth)(li), idxs ) 
+    #return map(lambda idx: F.tap(nth(idx,seq),label='!!'), idxs)
+
 remove = F.remove
 lremove = F.lremove
 cremove = F.curry(F.remove)
@@ -89,9 +109,6 @@ negate = lambda x: (not x)
 def negated(predicate) -> bool:
     return wrap(predicate, negate)
 
-def nths(seq, idxs):
-    return map( rcurry(nth)(unzip(seq)), idxs ) 
-
 import unittest
 class Test_fp(unittest.TestCase):
     def test_negated(self):
@@ -100,6 +117,29 @@ class Test_fp(unittest.TestCase):
         self.assertEqual( pred(0), negated(negated(pred))(0) )
         self.assertNotEqual( pred(1), negated(pred)(1) )
         self.assertNotEqual( pred(0), negated(pred)(0) )
+    def test_nths(self):
+        self.assertEqual(nth(0,[1,2,3]), 1)
+        self.assertEqual([ *nths([0,2],[1,2,3]) ], [1,3])
+
+        print('ppap')
+        self.assertEqual(
+            [*nths([7,8], [c for c in '0123456789abc'])], ['7','8'] 
+        )
+        print('ppap2')
+        self.assertEqual(
+            [*nths([7,8], (c for c in '0123456789abc'))], ['7','8'] 
+        )
+
+    '''
+    def test_is_generator(self):
+        def gen(xs):
+            for x in xs:
+                yield x
+
+        self.assertTrue(is_generator(gen))
+        self.assertTrue(is_generator(map))
+    '''
+
 
 if __name__ == '__main__':
     unittest.main()
