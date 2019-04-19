@@ -77,6 +77,7 @@ num_errors = 0
 for nth in fp.list_nths(wrong_rbk_idxes, 
                         fp.lunzip(file_paths)):
     num_errors += 1
+    print('error file:', nth[1])
     print(fp.pipe(
         cv2.imread, imutils.num_unique_colors
     )(nth[1]))
