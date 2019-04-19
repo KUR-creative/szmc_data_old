@@ -25,7 +25,7 @@ file_paths = fp.pipe(
 )(img_dirs)
 assert all_same(fp.map( len,file_paths ))
 
-not_same_idxs = fp.pipe(
+not_same_hw_idxs = fp.pipe(
     fp.cmap( fp.cmap(imagesize.get) ),
     fp.unzip,
     enumerate,
@@ -37,7 +37,7 @@ not_same_idxs = fp.pipe(
 
 num_errors = 0
 idx_nths = enumerate(fp.list_nths(
-    not_same_idxs, fp.lunzip(file_paths)
+    not_same_hw_idxs, fp.lunzip(file_paths)
 ))
 for idx,nth in idx_nths:
     num_errors += 1
@@ -68,24 +68,35 @@ def invalid_color_idxs(imgpaths, colors):
         fp.clmap( fp.idx_enum ), # get index
     )(imgpaths)
 
-wrong_rbk_idxes = invalid_color_idxs(
-    file_paths[1],
-    [[0,0,255], [255,0,0], [0,0,0]]  # r b k
-)
+def print_error_labels(label_paths,colors):
+    wrong_rbk_idxes = invalid_color_idxs(
+        label_paths,colors
+    )
+    num_errors = 0
+    for lpath in fp.list_nths(wrong_rbk_idxes, 
+                              label_paths):
+        num_errors += 1
+        print('error label:', lpath)
+        print(fp.pipe(
+            cv2.imread, imutils.num_unique_colors
+        )(lpath))
 
-num_errors = 0
-for nth in fp.list_nths(wrong_rbk_idxes, 
-                        fp.lunzip(file_paths)):
-    num_errors += 1
-    print('error file:', nth[1])
-    print(fp.pipe(
-        cv2.imread, imutils.num_unique_colors
-    )(nth[1]))
+    if num_errors == 0:
+        print('all labels are cleaned!')
+    else:
+        sys.exit('%d image has error...' % num_errors)
 
-if num_errors == 0:
-    print('all labels are cleaned!')
-else:
-    sys.exit('%d image has error...' % num_errors)
+'''
+'''
+# check rbk labels
+print_error_labels(
+    file_paths[1], [[0,0,255], [255,0,0], [0,0,0]]
+)                  # r b k
+
+# check wk labels
+print_error_labels(
+    file_paths[2], [[255,255,255], [0,0,0]]  # w k
+)                 
 ######################################################
 # Or.. Add your propositions..
 
