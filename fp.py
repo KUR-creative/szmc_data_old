@@ -38,6 +38,7 @@ second = F.second
 nth = F.nth
 cnth = F.curry(F.nth)
 
+interleave = F.interleave
 '''
 import types
 import inspect
@@ -51,7 +52,7 @@ def list_nths(idxs, li):
     #seq = F.tap(list(seq)[:10], label='seq')
     assert (  isinstance(li, list) 
            or isinstance(li,  str) 
-           or isinstance(li,tuple))
+           or isinstance(li,tuple)), 'arg2 "li": %s is not list/str/tuple' % type(li) 
     return map( rcurry(nth)(li), idxs ) 
     #return map(lambda idx: F.tap(nth(idx,seq),label='!!'), idxs)
 
@@ -109,8 +110,21 @@ negate = lambda x: (not x)
 def negated(predicate) -> bool:
     return wrap(predicate, negate)
 
+def ctor(dtype):
+    def make(*args):
+        return dtype([*args])
+    return make
+
 import unittest
 class Test_fp(unittest.TestCase):
+    def test_make_tuple(self):
+        self.assertEqual(ctor(tuple)(),    tuple())
+        self.assertEqual(ctor(tuple)(1),   (1,)   )
+        self.assertEqual(ctor(tuple)(1,2), (1,2)  )
+        self.assertEqual(ctor(list)(),    []   )
+        self.assertEqual(ctor(list)(1),   [1,] )
+        self.assertEqual(ctor(list)(1,2), [1,2])
+
     def test_negated(self):
         pred = lambda x: x != 1
         self.assertEqual( pred(1), negated(negated(pred))(1) )
@@ -119,16 +133,15 @@ class Test_fp(unittest.TestCase):
         self.assertNotEqual( pred(0), negated(pred)(0) )
     def test_nths(self):
         self.assertEqual(nth(0,[1,2,3]), 1)
-        self.assertEqual([ *nths([0,2],[1,2,3]) ], [1,3])
+        self.assertEqual([ *list_nths([0,2],[1,2,3]) ], [1,3])
 
         print('ppap')
         self.assertEqual(
-            [*nths([7,8], [c for c in '0123456789abc'])], ['7','8'] 
+            [*list_nths([7,8], [c for c in '0123456789abc'])], ['7','8'] 
         )
         print('ppap2')
-        self.assertEqual(
-            [*nths([7,8], (c for c in '0123456789abc'))], ['7','8'] 
-        )
+        with self.assertRaises(AssertionError):
+            [*list_nths([7,8], (c for c in '0123456789abc'))]
 
     '''
     def test_is_generator(self):
