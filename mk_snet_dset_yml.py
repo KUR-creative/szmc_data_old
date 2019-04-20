@@ -104,20 +104,49 @@ print_error_labels(
 
 ######### sorted by proportion of not black ##########
 
-non_k_proportions = fp.pipe(
-    fp.cmap( cv2.imread ),
-    fp.cmap( imutils.num_unique_colors ),
-    #fp.cmap( fp.cmap(lambda arr:arr.tolist()) ),
-    fp.cmap( fp.clmap(lambda arr:arr.tolist()) ),
-    fp.cmap( fp.tap ), # display
-    fp.cmap( lambda xy: (fp.first(xy),) ),
-    fp.cmap( fp.tap ), # display
-    fp.cmap( fp.tup(fp.zipdict) ),
-    fp.cmap( fp.tap ), # display
-    #fp.cmap( fp.linto(tuple) ),
-    list,
+img2colormap = fp.pipe(
+    imutils.num_unique_colors,
+    fp.cmap( lambda arr:arr.tolist() ),
+    fp.clmap( fp.tree_leaves ),
+    lambda xy:   [fp.chunks(3, xy[0]), xy[1]],
+    lambda xy: [fp.into(tuple)(xy[0]), xy[1]],
 )
 
+img_sizeseq = fp.pipe(
+    fp.cmap( imagesize.get  ),
+    fp.cmap( fp.tup(fp.mul) ),
+)(file_paths[0]) 
+
+colormaps = fp.pipe(
+    fp.cmap( cv2.imread ),
+    fp.cmap( img2colormap ),
+    fp.cmap( fp.tup(fp.zipdict) ),
+    #fp.cmap( fp.ctap(label='dict') ), # display
+)
+
+'''
+#????
+rb_colormaps = colormaps(file_paths[1])
+def ratio_map(colormap, size):
+    return fp.walk_values(
+        lambda v: v/size, colormap
+    )
+
+color_proportion_map = fp.pipe(
+    zip,
+    fp.cwalk( lambda v: v / 
+)(rb_colormaps, img_sizeseq)
+'''
+
 #print(file_paths[1])
-rb_proportion = non_k_proportions(file_paths[1])
+rb_colormaps = colormaps(file_paths[1])
+for colormap,size in zip(rb_colormaps,img_sizeseq):
+    color_ratio_map = fp.walk_values(
+        lambda v: v/size, colormap
+    )
+    #print(color_ratio_map)
+    print( sorted(color_ratio_map.items()) )
+
+#n_non_black = sum(fp.colormap.values())
+#print( sorted(colormap.items()) )
 ######################################################
