@@ -115,38 +115,45 @@ img2colormap = fp.pipe(
 img_sizeseq = fp.pipe(
     fp.cmap( imagesize.get  ),
     fp.cmap( fp.tup(fp.mul) ),
-)(file_paths[0]) 
+    )(file_paths[0]) 
 
 colormaps = fp.pipe(
     fp.cmap( cv2.imread ),
     fp.cmap( img2colormap ),
     fp.cmap( fp.tup(fp.zipdict) ),
-    #fp.cmap( fp.ctap(label='dict') ), # display
 )
 
+rb_colormaps = colormaps(file_paths[1]) 
+sorted_id_scoreseq = fp.pipe(
+    fp.cmap(
+        lambda size,cmap: fp.walk_values(lambda v:v / size,cmap) 
+    ),
+    fp.cmap( fp.rcurry(fp.omit)( [(0,0,0)] )  ),
+    fp.cmap( fp.itervalues ),
+    fp.cmap( sum ), # calculate score 
+    enumerate,      # get id
+    fp.cmap( fp.pipe(reversed,tuple) ),
+    fp.partial(tqdm, total=len(file_paths[1])),
+    sorted,         # sort by score 
+)( img_sizeseq, rb_colormaps )
+
+path_scoreseq = fp.map(
+    fp.tup( lambda score,i: [file_paths[1][i],score] ),
+    sorted_id_scoreseq
+)
+
+print('          path                     score')
+for path,score in path_scoreseq:
+    print(path, '\t', score)
+
 '''
-#????
 rb_colormaps = colormaps(file_paths[1])
-def ratio_map(colormap, size):
-    return fp.walk_values(
-        lambda v: v/size, colormap
-    )
-
-color_proportion_map = fp.pipe(
-    zip,
-    fp.cwalk( lambda v: v / 
-)(rb_colormaps, img_sizeseq)
+fs = fp.map(lambda size: lambda value: value / size, img_sizeseq)
+rb_proportion_map = fp.pipe(
+    fp.construct(list),
+    fp.czipmap(fp.tup(fp.cwalk_values)),
+    fp.cmap( fp.tap ),
+    list,
+)(fs, rb_colormaps)
 '''
-
-#print(file_paths[1])
-rb_colormaps = colormaps(file_paths[1])
-for colormap,size in zip(rb_colormaps,img_sizeseq):
-    color_ratio_map = fp.walk_values(
-        lambda v: v/size, colormap
-    )
-    #print(color_ratio_map)
-    print( sorted(color_ratio_map.items()) )
-
-#n_non_black = sum(fp.colormap.values())
-#print( sorted(colormap.items()) )
 ######################################################
