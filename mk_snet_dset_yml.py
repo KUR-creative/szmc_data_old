@@ -142,7 +142,7 @@ path_scoreseq = fp.map(
     sorted_id_scoreseq
 )
 
-print('          path                     score')
+print('path\tscore')
 for path,score in path_scoreseq:
     print(path, '\t', score)
 
