@@ -115,9 +115,10 @@ def ctor(dtype):
         return dtype([*args])
     return make
 
+
 import unittest
 class Test_fp(unittest.TestCase):
-    def test_make_tuple(self):
+    def test_ctor(self):
         self.assertEqual(ctor(tuple)(),    tuple())
         self.assertEqual(ctor(tuple)(1),   (1,)   )
         self.assertEqual(ctor(tuple)(1,2), (1,2)  )

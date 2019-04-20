@@ -25,6 +25,7 @@ file_paths = fp.pipe(
 )(img_dirs)
 assert all_same(fp.map( len,file_paths ))
 
+'''
 not_same_hw_idxs = fp.pipe(
     fp.cmap( fp.cmap(imagesize.get) ),
     fp.unzip,
@@ -48,6 +49,7 @@ if num_errors == 0:
     print('all image,labels are same size each other!')
 else:
     sys.exit('%d image has error...' % num_errors)
+'''
 ######################################################
 
 ######## Is cleaned? (check color uniqueness) ########
@@ -87,7 +89,6 @@ def print_error_labels(label_paths,colors):
         sys.exit('%d image has error...' % num_errors)
 
 '''
-'''
 # check rbk labels
 print_error_labels(
     file_paths[1], [[0,0,255], [255,0,0], [0,0,0]]
@@ -97,9 +98,26 @@ print_error_labels(
 print_error_labels(
     file_paths[2], [[255,255,255], [0,0,0]]  # w k
 )                 
+'''
 ######################################################
 # Or.. Add your propositions..
 
+######### sorted by proportion of not black ##########
 
-    #fp.cmap( fp.pipe(imutls.categorize, fp.second) ),
-    #fp.cmap( fp.tap ), # just look & feel!
+non_k_proportions = fp.pipe(
+    fp.cmap( cv2.imread ),
+    fp.cmap( imutils.num_unique_colors ),
+    #fp.cmap( fp.cmap(lambda arr:arr.tolist()) ),
+    fp.cmap( fp.clmap(lambda arr:arr.tolist()) ),
+    fp.cmap( fp.tap ), # display
+    fp.cmap( lambda xy: (fp.first(xy),) ),
+    fp.cmap( fp.tap ), # display
+    fp.cmap( fp.tup(fp.zipdict) ),
+    fp.cmap( fp.tap ), # display
+    #fp.cmap( fp.linto(tuple) ),
+    list,
+)
+
+#print(file_paths[1])
+rb_proportion = non_k_proportions(file_paths[1])
+######################################################
