@@ -129,7 +129,8 @@ negate = lambda x: (not x)
 def negated(predicate) -> bool:
     return wrap(predicate, negate)
 
-def construct(dtype):
+@F.autocurry
+def ctor(dtype):
     def make(*args):
         return dtype([*args])
     return make
@@ -140,13 +141,13 @@ tree_leaves = F.tree_leaves
 ltree_leaves = F.ltree_leaves
 import unittest
 class Test_fp(unittest.TestCase):
-    def test_construct(self):
-        self.assertEqual(construct(tuple)(),   tuple())
-        self.assertEqual(construct(tuple)(1),  (1,)   )
-        self.assertEqual(construct(tuple)(1,2),(1,2)  )
-        self.assertEqual(construct(list)(),    []   )
-        self.assertEqual(construct(list)(1),   [1,] )
-        self.assertEqual(construct(list)(1,2), [1,2])
+    def test_ctor(self):
+        self.assertEqual(ctor(tuple)(),   tuple())
+        self.assertEqual(ctor(tuple)(1),  (1,)   )
+        self.assertEqual(ctor(tuple)(1,2),(1,2)  )
+        self.assertEqual(ctor(list)(),    []   )
+        self.assertEqual(ctor(list)(1),   [1,] )
+        self.assertEqual(ctor(list)(1,2), [1,2])
 
     def test_negated(self):
         pred = lambda x: x != 1
