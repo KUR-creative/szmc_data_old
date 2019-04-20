@@ -30,6 +30,7 @@ rpartial = F.rpartial
 reduce = functools.reduce
 #creduce = F.curry(functools.reduce) # cannot curry reduce,,,??? it's impl issue!!
 plus = lambda a,b: a+b
+mul = lambda a,b: a*b
 equals = lambda a,b: a == b 
 sub1 = lambda x: x - 1
 
@@ -66,7 +67,7 @@ clremove = F.curry(F.lremove)
 keep = F.keep
 
 tap = F.tap
-#ctap = F.curry(F.tap) #TODO
+ctap = F.autocurry(F.tap) #TODO
 
 chunks = F.chunks
 cchunks = F.curry(F.chunks)
@@ -82,6 +83,11 @@ pipe = F.rcompose
 
 walk = F.walk
 cwalk = F.curry(F.walk)
+walk_keys = F.walk_keys
+cwalk_keys = F.curry(F.walk_keys)
+walk_values = F.walk_values
+cwalk_values = F.curry(F.walk_values)
+
 map = F.map
 lmap = F.lmap
 cmap = F.curry(F.map)
@@ -94,6 +100,7 @@ repeat = F.repeat
 pairwise = F.pairwise
 butlast = F.butlast
 lbutlast = lambda seq: list(F.butlast(seq))
+
 zipdict = F.zipdict
 cmerge_with = F.curry(F.merge_with)
 merge = F.merge
@@ -115,7 +122,10 @@ def ctor(dtype):
         return dtype([*args])
     return make
 
-
+tree_nodes = F.tree_nodes
+ltree_nodes = F.ltree_nodes
+tree_leaves = F.tree_leaves
+ltree_leaves = F.ltree_leaves
 import unittest
 class Test_fp(unittest.TestCase):
     def test_ctor(self):
