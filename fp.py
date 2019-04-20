@@ -31,6 +31,8 @@ reduce = functools.reduce
 #creduce = F.curry(functools.reduce) # cannot curry reduce,,,??? it's impl issue!!
 plus = lambda a,b: a+b
 mul = lambda a,b: a*b
+div2 = lambda a,b: a/b
+cdiv2 = F.curry(div2)
 equals = lambda a,b: a == b 
 sub1 = lambda x: x - 1
 
@@ -59,8 +61,8 @@ def list_nths(idxs, li):
 
 remove = F.remove
 lremove = F.lremove
-cremove = F.curry(F.remove)
-clremove = F.curry(F.lremove)
+cremove = F.autocurry(F.remove)
+clremove = F.autocurry(F.lremove)
 
 #ckeep = F.curry(F.keep) # doesn't work!!!
 # use partial..
@@ -70,8 +72,8 @@ tap = F.tap
 ctap = F.autocurry(F.tap) #TODO
 
 chunks = F.chunks
-cchunks = F.curry(F.chunks)
-clchunks = F.curry(F.lchunks)
+cchunks = F.autocurry(F.chunks)
+clchunks = F.autocurry(F.lchunks)
 
 flatten = F.flatten
 lflatten = F.lflatten
@@ -82,27 +84,37 @@ ilen = F.ilen
 pipe = F.rcompose
 
 walk = F.walk
-cwalk = F.curry(F.walk)
+cwalk = F.autocurry(F.walk)
 walk_keys = F.walk_keys
-cwalk_keys = F.curry(F.walk_keys)
+cwalk_keys = F.autocurry(F.walk_keys)
 walk_values = F.walk_values
-cwalk_values = F.curry(F.walk_values)
+cwalk_values = F.autocurry(F.walk_values)
+
+itervalues = F.itervalues
 
 map = F.map
 lmap = F.lmap
-cmap = F.curry(F.map)
-clmap = F.curry(F.lmap)
-cfilter = F.curry(F.filter)
+cmap = F.autocurry(F.map)
+clmap = F.autocurry(F.lmap)
+cfilter = F.autocurry(F.filter)
 
-cmapcat = F.curry(F.mapcat)
+cmapcat = F.autocurry(F.mapcat)
 
 repeat = F.repeat
 pairwise = F.pairwise
 butlast = F.butlast
 lbutlast = lambda seq: list(F.butlast(seq))
 
+zipmap = lambda f,xs: cmap(f,zip(xs))
+czipmap = F.autocurry( lambda f,xs: cmap(f,zip(xs)) )
+zipwalk = lambda f: pipe(zip, cwalk(f))
+czipwalk = F.autocurry( lambda f: pipe(zip, cwalk(f)) )
+czipwalk_values = F.autocurry( lambda f: pipe(zip, cwalk_values(f)) )
+
 zipdict = F.zipdict
-cmerge_with = F.curry(F.merge_with)
+omit = F.omit
+comit = F.autocurry(F.omit)
+cmerge_with = F.autocurry(F.merge_with)
 merge = F.merge
 
 tup = lambda f: lambda argtup: f(*argtup)
@@ -117,7 +129,7 @@ negate = lambda x: (not x)
 def negated(predicate) -> bool:
     return wrap(predicate, negate)
 
-def ctor(dtype):
+def construct(dtype):
     def make(*args):
         return dtype([*args])
     return make
@@ -128,13 +140,13 @@ tree_leaves = F.tree_leaves
 ltree_leaves = F.ltree_leaves
 import unittest
 class Test_fp(unittest.TestCase):
-    def test_ctor(self):
-        self.assertEqual(ctor(tuple)(),    tuple())
-        self.assertEqual(ctor(tuple)(1),   (1,)   )
-        self.assertEqual(ctor(tuple)(1,2), (1,2)  )
-        self.assertEqual(ctor(list)(),    []   )
-        self.assertEqual(ctor(list)(1),   [1,] )
-        self.assertEqual(ctor(list)(1,2), [1,2])
+    def test_construct(self):
+        self.assertEqual(construct(tuple)(),   tuple())
+        self.assertEqual(construct(tuple)(1),  (1,)   )
+        self.assertEqual(construct(tuple)(1,2),(1,2)  )
+        self.assertEqual(construct(list)(),    []   )
+        self.assertEqual(construct(list)(1),   [1,] )
+        self.assertEqual(construct(list)(1,2), [1,2])
 
     def test_negated(self):
         pred = lambda x: x != 1
