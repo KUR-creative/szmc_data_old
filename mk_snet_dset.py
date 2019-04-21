@@ -17,7 +17,7 @@ xlsx_name = Path(xlsx_path).stem
 
 dfs = pd.read_excel(xlsx_path, sheet_name=None)
 df = dfs[xlsx_name].fillna(0)
-print(df)
+#print(df)
 
 score_paths = df['path'][:-1]
 devs  = df['dev' ][:-1]
@@ -28,6 +28,7 @@ print(devs)
 print(tests)
 '''
 #print(list(enumerate(devs[:10])))
+
 selected_idxs = fp.pipe(
     enumerate,
     fp.cremove(fp.tup( lambda i,x: x == 0.0 )),
@@ -136,13 +137,3 @@ for (category,omap,paths), scale in product(labels, scales):
         exist_ok = True
     )
 ##################################################################
-
-# img_paths
-# rbk_paths
-# wk_paths
-
-# rbk_origin_map
-# wk_origin_map
-
-# mkdir ./snet_data/190421/
-# 
