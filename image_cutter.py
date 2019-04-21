@@ -1,3 +1,12 @@
+'''
+Script for cutting very big images.
+
+Cnet cannot train from too big images, 
+so I cut big images into 1200x900 ~ 300xH or Wx300 (190421ver)
+
+If you want know data flow of this script,
+See One-note -> szmc -> data-creation -> Image cutter
+'''
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1000000000 
 #NOTE:prevent DOS attack error raised from PIL

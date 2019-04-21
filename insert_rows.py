@@ -1,3 +1,10 @@
+'''
+insert rows to db
+This script used for creation of szmc.db 
+
+create_db   -> szmc Schema
+insert_rows -> szmc rows(data)
+'''
 import json
 import sqlite3
 from funcy import concat, map, filter, mapcat, partial, rcompose, lmap, tap, ignore, lfilter

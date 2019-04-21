@@ -1,3 +1,10 @@
+'''
+Class for DB access
+DB state manager
+
+Add functions into DB if you want some operations... 
+And call them.
+'''
 import sqlite3
 import numpy as np
 import pandas as pd

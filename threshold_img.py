@@ -1,3 +1,7 @@
+'''
+Threshold rgb images.
+Used for creation of Snet dataset
+'''
 import os
 import numpy as np
 from futils import file_pathseq, human_sorted

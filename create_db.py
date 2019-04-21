@@ -1,3 +1,7 @@
+'''
+Define szmc Schema.
+And create db.
+'''
 import sqlite3
 def create_table(name='szmc.db'):
     with sqlite3.connect(name) as db:

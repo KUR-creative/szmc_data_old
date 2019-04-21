@@ -1,3 +1,9 @@
+'''
+Make Cnet dataset.flist from 2 or more path.jsons(from image cutter)
+
+python merge_jaon2flist.py 1.json 2.json 3.json dst.flist
+'''
+
 # src_json structure:
 # { 'img_path1':metadata1, 
 #   'img_path2':metadata2, 

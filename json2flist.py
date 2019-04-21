@@ -1,3 +1,9 @@
+'''
+Script for creation of dataset for Cnet training
+
+input:  json file of cropped image(from image_cutter)
+output: flist file for Cnet training
+'''
 import json
 from random import shuffle
 import fp

@@ -1,3 +1,7 @@
+'''
+Algorithms for image cutter.
+'''
+
 from scipy import ndimage
 import funcy as F
 import fp

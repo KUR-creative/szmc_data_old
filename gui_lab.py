@@ -1,3 +1,7 @@
+'''
+This would be useles..
+Delete it!
+'''
 #-*- coding: utf-8 -*-
 from access_db import img_pathseq
 

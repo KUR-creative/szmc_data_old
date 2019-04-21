@@ -1,3 +1,6 @@
+'''
+KUR's Functional Programming Gears for Python
+'''
 import funcy as F
 import functools
 import itertools

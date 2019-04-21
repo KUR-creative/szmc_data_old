@@ -1,3 +1,10 @@
+'''
+Script for creation of dataset for Cnet training
+*USELESS* due to too big image sizes..
+
+input:  from samc DB
+output: flist file for Cnet training
+'''
 import funcy as F
 from access_db import DB
 

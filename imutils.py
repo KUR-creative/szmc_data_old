@@ -1,3 +1,6 @@
+'''
+Utils for Image Processing
+'''
 import cv2
 import numpy as np
 def to_categorical(y, num_classes=None, dtype='float32'):

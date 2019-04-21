@@ -1,3 +1,11 @@
+'''
+Run Santy Check for Snet Images
+1. Dose all Images have same sizes each other(image-label)?
+2. Are all cleaned images? (Images only have allowed colors?)
+
+And then print path-scores in sorted by score
+You can redirect it.
+'''
 import sys
 from tqdm import tqdm
 import cv2
@@ -15,7 +23,7 @@ yml_names  = ['rbk.yml', 'wk.yml']
 #TODO Fix some data? dev or..
 
 ################## Sanity Checks ####################
-#########  Is all same size? ##########
+#########  Are all same size? ##########
 all_same = lambda xs: len(set(xs)) == 1
 img_dirs = [img_dir] + label_dirs
 
@@ -142,6 +150,7 @@ path_scoreseq = fp.map(
     sorted_id_scoreseq
 )
 
+# print path-score (sorted in score)
 print('path\tscore')
 for path,score in path_scoreseq:
     print(path, '\t', score)

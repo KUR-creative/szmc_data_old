@@ -1,3 +1,7 @@
+'''
+Simple gui for selecting text state of image
+select O / A / H / N !
+'''
 #-*- coding: utf-8 -*-
 from access_db import DB
 

@@ -1,4 +1,10 @@
 # -*- encoding: utf-8 -*-
+'''
+Script for rsync file list creation
+
+danbooru2018jsons -> wanted image id list file
+190421ver: "absurdres" & "monochrome"
+'''
 import json
 from tqdm import tqdm
 from itertools import chain

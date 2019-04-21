@@ -1,3 +1,10 @@
+'''
+Change origin dataset directory to id dataset directory
+(NOTE: Renmae files)
+
+input: path of directory that contain origin files(has strange name)
+output: *RENAME* files of input directory, and name:id mapping json file
+'''
 import os
 import sys
 from pathlib import Path, PurePosixPath
