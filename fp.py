@@ -36,12 +36,13 @@ reduce = functools.reduce
 plus2= lambda a,b: a+b
 sub2 = lambda a,b: a-b
 mul2 = lambda a,b: a*b
+div2 = lambda a,b: a/b
 
 plus= lambda *xs: reduce(plus2,[*xs])
 sub = lambda *xs: reduce(sub2, [*xs])
 mul = lambda *xs: reduce(mul2, [*xs])
+div = lambda *xs: reduce(div2, [*xs])
 
-div2 = lambda a,b: a/b
 cdiv2 = F.curry(div2)
 equals = lambda a,b: a == b 
 sub1 = lambda x: x - 1

@@ -1,7 +1,7 @@
 import cv2
 import sys
 import random
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import pandas as pd
 from futils import human_sorted, file_pathseq, write_text
 from imutils import categorize
@@ -97,7 +97,17 @@ for x in dset.items():
 ##################################################################
 
 ###################### Save index list ###########################
-write_text('text', './snet_data/190421/idx/190421idx50.json', exist_ok=True)
+root = './snet_data'
+def dset_path(root, version, category, scale, extension):
+    name = fp.plus(
+        *fp.map(str, [version, category, scale, '.', extension])
+    )
+    return Path(fp.div( # / 
+        PurePosixPath(root),
+        *fp.map(str, [version, category, name])
+    ))
+#print(dset_path(root,190421,'rbk','100','yml'))
+
 ##################################################################
 
 # img_paths
