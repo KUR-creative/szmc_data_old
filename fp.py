@@ -32,8 +32,14 @@ rpartial = F.rpartial
 
 reduce = functools.reduce
 #creduce = F.curry(functools.reduce) # cannot curry reduce,,,??? it's impl issue!!
-plus = lambda a,b: a+b
-mul = lambda a,b: a*b
+plus2= lambda a,b: a+b
+sub2 = lambda a,b: a-b
+mul2 = lambda a,b: a*b
+
+plus= lambda *xs: reduce(plus2,[*xs]) # same as sum
+sub = lambda *xs: reduce(sub2, [*xs])
+mul = lambda *xs: reduce(mul2, [*xs])
+
 div2 = lambda a,b: a/b
 cdiv2 = F.curry(div2)
 equals = lambda a,b: a == b 
@@ -85,6 +91,7 @@ lcat = F.lcat
 
 ilen = F.ilen
 pipe = F.rcompose
+compose = F.compose
 
 walk = F.walk
 cwalk = F.autocurry(F.walk)
