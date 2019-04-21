@@ -73,9 +73,9 @@ for x in idxs_table[50].items(): print(x)
 ##################################################################
 
 ################# Make idx,paths -> dataset dict ################
-img_paths = human_sorted(file_pathseq('./snet_data/image/'))
-rbk_paths = score_paths #(from scores.xlsx)
-wk_paths  = human_sorted(file_pathseq('./snet_data/clean_wk/'))
+img_paths = human_sorted(file_pathseq('./snet_data/image'))
+rbk_paths = human_sorted(file_pathseq('./snet_data/clean_rbk'))
+wk_paths  = human_sorted(file_pathseq('./snet_data/clean_wk'))
 
 _,rbk_omap= categorize(cv2.imread('./snet_data/rbk_sample.png'))
 _,wk_omap = categorize(cv2.imread('./snet_data/wk_sample.png'))
@@ -94,9 +94,12 @@ def dataset(img_paths, rdt_idxs, origin_map, label_paths):
         'test_masks': fp.lli_nths(rdt_idxs[ 'test'], label_paths),
     }
 '''
-dset = dataset(img_paths, idxs_table[50], rbk_omap, rbk_paths)
-for x in dset.items():
-    print(x)
+dset = dataset(img_paths, idxs_table[50], rbk_omap, 
+    human_sorted(file_pathseq('./snet_data/clean_rbk')))
+print(img_paths)
+print(rbk_paths)
+print(dset['train_imgs'])
+print(dset['train_masks'])
 '''
 ##################################################################
 
