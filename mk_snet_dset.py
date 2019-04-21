@@ -1,8 +1,9 @@
 import cv2
 import sys
+import random
 from pathlib import Path
 import pandas as pd
-from futils import human_sorted, file_pathseq
+from futils import human_sorted, file_pathseq, write_text
 from imutils import categorize
 
 import fp
@@ -43,7 +44,6 @@ assert fp.pipe(len,range,set)(score_paths) \
 
 #print('dev',dev57idxs, 'test',test28idxs, 'train',train200idxs, sep='\n')
 
-import random
 sample = lambda xs,ratio: random.sample(xs, int(len(xs) * ratio))
 full_idxs_list = [train200idxs, dev57idxs, test28idxs]
 keys = ['train','valid','test']
@@ -97,6 +97,7 @@ for x in dset.items():
 ##################################################################
 
 ###################### Save index list ###########################
+write_text('text', './snet_data/190421/idx/190421idx50.json', exist_ok=True)
 ##################################################################
 
 # img_paths
