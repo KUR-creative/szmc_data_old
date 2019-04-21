@@ -36,7 +36,7 @@ plus2= lambda a,b: a+b
 sub2 = lambda a,b: a-b
 mul2 = lambda a,b: a*b
 
-plus= lambda *xs: reduce(plus2,[*xs]) # same as sum
+plus= lambda *xs: reduce(plus2,[*xs])
 sub = lambda *xs: reduce(sub2, [*xs])
 mul = lambda *xs: reduce(mul2, [*xs])
 

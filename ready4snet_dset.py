@@ -122,7 +122,7 @@ img2colormap = fp.pipe(
 
 img_sizeseq = fp.pipe(
     fp.cmap( imagesize.get  ),
-    fp.cmap( fp.tup(fp.mul) ),
+    fp.cmap( fp.tup(fp.mul2) ),
     )(file_paths[0]) 
 
 colormaps = fp.pipe(
