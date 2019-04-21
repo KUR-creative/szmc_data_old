@@ -24,6 +24,7 @@ def foreach(f, seq):
 permutations = itertools.permutations
 lpermutations = lambda seq: list(itertools.permutations(seq))
 
+id = lambda x:x
 
 curry = F.curry
 rcurry = F.rcurry
@@ -110,6 +111,7 @@ cfilter = F.autocurry(F.filter)
 
 cmapcat = F.autocurry(F.mapcat)
 
+
 repeat = F.repeat
 pairwise = F.pairwise
 butlast = F.butlast
@@ -122,6 +124,9 @@ czipwalk = F.autocurry( lambda f: pipe(zip, cwalk(f)) )
 czipwalk_values = F.autocurry( lambda f: pipe(zip, cwalk_values(f)) )
 
 zipdict = F.zipdict
+#def mapdict(key_func, val_func, keys, vals):
+    #return zipdict( map(key_func, keys), map(val_func, vals) )
+
 omit = F.omit
 comit = F.autocurry(F.omit)
 cmerge_with = F.autocurry(F.merge_with)
