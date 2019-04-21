@@ -37,15 +37,31 @@ train200idxs= list(fp.sub(
 assert fp.pipe(len,range,set)(paths) \
        == set(fp.plus(train200idxs,dev57idxs,test28idxs))
 
-print('dev',dev57idxs, 'test',test28idxs, 'train',train200idxs, sep='\n')
+#print('dev',dev57idxs, 'test',test28idxs, 'train',train200idxs, sep='\n')
 
+import random
+sample = lambda xs,ratio: random.sample(xs, int(len(xs) * ratio))
+
+full_idxs_list = [train200idxs, dev57idxs, test28idxs]
 idxs_rdt = { # rdt = tRain / Dev / Test
-    200:[train200idxs, dev57idxs, test28idxs],
-   #150:3/4 200_idxs_rdt
-   #100:2/3 150_idxs_rdt
-   #50: 1/2 100_idxs_rdt
+    200: full_idxs_list,
+    150: fp.clmap(sample, full_idxs_list, [3/4]*3),
+    100: fp.clmap(sample, full_idxs_list, [1/2]*3),
+     50: fp.clmap(sample, full_idxs_list, [1/4]*3),
 }
 
+from pprint import pprint
+print('-------200-------')
+for x in idxs_rdt[200]: print('------->',x)
+
+print('-------150-------')
+for x in idxs_rdt[150]: print('------->',x)
+
+print('-------100-------')
+for x in idxs_rdt[100]: print('------->',x)
+
+print('-------50--------')
+for x in idxs_rdt[50]: print('------->',x)
 # img_paths
 # rbk_paths
 # wk_paths
