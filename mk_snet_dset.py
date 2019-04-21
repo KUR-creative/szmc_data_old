@@ -7,7 +7,7 @@ import pandas as pd
 from itertools import product
 
 from futils import human_sorted, file_pathseq, write_text
-from imutils import categorize
+from imutils import categorize, bgr_float32
 
 import fp
 
@@ -78,8 +78,8 @@ img_paths = human_sorted(file_pathseq('./snet_data/image'))
 rbk_paths = human_sorted(file_pathseq('./snet_data/clean_rbk'))
 wk_paths  = human_sorted(file_pathseq('./snet_data/clean_wk'))
 
-_,rbk_omap= categorize(cv2.imread('./snet_data/rbk_sample.png'))
-_,wk_omap = categorize(cv2.imread('./snet_data/wk_sample.png'))
+_,rbk_omap= categorize(bgr_float32(cv2.imread('./snet_data/rbk_sample.png')))
+_,wk_omap = categorize(bgr_float32(cv2.imread('./snet_data/wk_sample.png')))
 
 def dataset(img_paths, rdt_idxs, origin_map, label_paths):
     '''     *fixed*    w/ scale  w/ label    w/ label    '''

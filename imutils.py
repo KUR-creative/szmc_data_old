@@ -3,6 +3,16 @@ Utils for Image Processing
 '''
 import cv2
 import numpy as np
+
+def bgr_float32(uint8img):
+    c = 1 if len(uint8img.shape) == 2 else 3
+    h,w = uint8img.shape[:2]
+    float32img = (uint8img / 255).astype(np.float32)
+    return float32img.reshape((h,w,c))
+
+def bgr_uint8(float32img):
+    return (float32img * 255).astype(np.uint8)
+
 def to_categorical(y, num_classes=None, dtype='float32'):
     """Converts a class vector (integers) to binary class matrix.
     E.g. for use with categorical_crossentropy.
