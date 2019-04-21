@@ -67,10 +67,9 @@ for x in idxs_table[100].items(): print(x)
 print('-------50--------')
 for x in idxs_table[50].items(): print(x)
 '''
-###################### Save index list ###########################
 ##################################################################
 
-##################################################################
+################# Make idx,paths -> dataset dict ################
 img_paths = human_sorted(file_pathseq('./snet_data/image/'))
 rbk_paths = score_paths #(from scores.xlsx)
 wk_paths  = human_sorted(file_pathseq('./snet_data/clean_wk/'))
@@ -90,13 +89,14 @@ def dataset(origin_map, rdt_idxs, img_paths, label_paths):
         'valid_masks':fp.lli_nths(rdt_idxs['valid'], label_paths),
         'test_masks': fp.lli_nths(rdt_idxs[ 'test'], label_paths),
     }
-
+'''
 dset = dataset(rbk_omap, idxs_table[50], img_paths, rbk_paths)
 for x in dset.items():
     print(x)
+'''
+##################################################################
 
-# org_map, idxs -> dset_dict
-
+###################### Save index list ###########################
 ##################################################################
 
 # img_paths
