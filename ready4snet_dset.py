@@ -45,7 +45,7 @@ not_same_hw_idxs = fp.pipe(
 )(file_paths)
 
 num_errors = 0
-idx_nths = enumerate(fp.list_nths(
+idx_nths = enumerate(fp.li_nths(
     not_same_hw_idxs, fp.lunzip(file_paths)
 ))
 for idx,nth in idx_nths:
@@ -83,7 +83,7 @@ def print_error_labels(label_paths,colors):
         label_paths,colors
     )
     num_errors = 0
-    for lpath in fp.list_nths(wrong_rbk_idxes, 
+    for lpath in fp.li_nths(wrong_rbk_idxes, 
                               label_paths):
         num_errors += 1
         print('error label:', lpath)
