@@ -1,8 +1,10 @@
 import cv2
 import sys
 import random
+import yaml
 from pathlib import Path, PurePosixPath
 import pandas as pd
+
 from futils import human_sorted, file_pathseq, write_text
 from imutils import categorize
 
@@ -96,8 +98,7 @@ for x in dset.items():
 '''
 ##################################################################
 
-###################### Save index list ###########################
-root = './snet_data'
+####################### Save datasets  ###########################
 def dset_path(root, version, category, scale, extension):
     name = fp.plus(
         *fp.map(str, [version, category, scale, '.', extension])
@@ -106,7 +107,19 @@ def dset_path(root, version, category, scale, extension):
         PurePosixPath(root),
         *fp.map(str, [version, category, name])
     ))
-#print(dset_path(root,190421,'rbk','100','yml'))
+
+root = './snet_data'
+version = 190421
+
+# save index
+for scale in [50,100,150,200]:
+    write_text(
+        dset_path(root, version, 'idx', scale, 'yml'),
+        yaml.dump(idxs_table[scale]),
+        exist_ok = True
+    )
+
+# save datasets
 
 ##################################################################
 
