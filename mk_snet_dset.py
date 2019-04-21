@@ -4,6 +4,7 @@ import random
 import yaml
 from pathlib import Path, PurePosixPath
 import pandas as pd
+from itertools import product
 
 from futils import human_sorted, file_pathseq, write_text
 from imutils import categorize
@@ -79,7 +80,8 @@ wk_paths  = human_sorted(file_pathseq('./snet_data/clean_wk/'))
 _,rbk_omap= categorize(cv2.imread('./snet_data/rbk_sample.png'))
 _,wk_omap = categorize(cv2.imread('./snet_data/wk_sample.png'))
 
-def dataset(origin_map, rdt_idxs, img_paths, label_paths):
+def dataset(img_paths, rdt_idxs, origin_map, label_paths):
+    '''     *fixed*    w/ scale  w/ label    w/ label    '''
     return {
         'origin_map': origin_map,
 
@@ -92,7 +94,7 @@ def dataset(origin_map, rdt_idxs, img_paths, label_paths):
         'test_masks': fp.lli_nths(rdt_idxs[ 'test'], label_paths),
     }
 '''
-dset = dataset(rbk_omap, idxs_table[50], img_paths, rbk_paths)
+dset = dataset(img_paths, idxs_table[50], rbk_omap, rbk_paths)
 for x in dset.items():
     print(x)
 '''
@@ -110,9 +112,10 @@ def dset_path(root, version, category, scale, extension):
 
 root = './snet_data'
 version = 190421
+scales = [50,100,150,200]
 
 # save index
-for scale in [50,100,150,200]:
+for scale in scales:
     write_text(
         dset_path(root, version, 'idx', scale, 'yml'),
         yaml.dump(idxs_table[scale]),
@@ -120,7 +123,15 @@ for scale in [50,100,150,200]:
     )
 
 # save datasets
-
+labels = [('rbk',rbk_omap,rbk_paths), ('wk',wk_omap,wk_paths)]
+for (category,omap,paths), scale in product(labels, scales):
+    write_text(
+        dset_path(root, version, category, scale, 'yml'),
+        yaml.dump(dataset(
+            img_paths, idxs_table[scale], omap, paths
+        )),
+        exist_ok = True
+    )
 ##################################################################
 
 # img_paths
