@@ -81,8 +81,8 @@ wk_paths  = human_sorted(file_pathseq('./snet_data/clean_wk'))
 _,rbk_omap= categorize(bgr_float32(cv2.imread('./snet_data/rbk_sample.png')))
 _,wk_omap = categorize(bgr_float32(cv2.imread('./snet_data/wk_sample.png')))
 
-def dataset(img_paths, rdt_idxs, origin_map, label_paths):
-    '''     *fixed*    w/ scale  w/ label    w/ label    '''
+def dataset(img_paths, rdt_idxs, origin_map, label_paths, ulti_omap, ulti_label_paths):
+    '''     *fixed*    w/ scale  w/ label    w/ label     *fixed*    w/ scale      '''
     return {
         'origin_map': origin_map,
 
@@ -93,6 +93,12 @@ def dataset(img_paths, rdt_idxs, origin_map, label_paths):
         'train_masks':fp.lli_nths(rdt_idxs['train'], label_paths),
         'valid_masks':fp.lli_nths(rdt_idxs['valid'], label_paths),
         'test_masks': fp.lli_nths(rdt_idxs[ 'test'], label_paths),
+
+        'ulti_omap': ulti_omap,
+
+        'ulti_train_masks':fp.lli_nths(rdt_idxs['train'], ulti_label_paths),
+        'ulti_valid_masks':fp.lli_nths(rdt_idxs['valid'], ulti_label_paths),
+        'ulti_test_masks': fp.lli_nths(rdt_idxs[ 'test'], ulti_label_paths),
     }
 '''
 dset = dataset(img_paths, idxs_table[50], rbk_omap, 
@@ -132,7 +138,8 @@ for (category,omap,paths), scale in product(labels, scales):
     write_text(
         dset_path(root, version, category, scale, 'yml'),
         yaml.dump(dataset(
-            img_paths, idxs_table[scale], omap, paths
+            img_paths, idxs_table[scale], omap, paths,
+            wk_omap, wk_paths # for ultimate evaluation
         )),
         exist_ok = True
     )
