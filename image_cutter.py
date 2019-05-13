@@ -6,6 +6,17 @@ so I cut big images into 1200x900 ~ 300xH or Wx300 (190421ver)
 
 If you want know data flow of this script,
 See One-note -> szmc -> data-creation -> Image cutter
+
+python image_cutter.py crops_metadata.json
+python image_cutter.py crops_metadata.json valid
+python image_cutter.py crops_metadata.json all #TODO
+
+DB --( / valid / all)-> imgpaths -> images
+ -> cropped_images -> save to danbooru_raw  
+
+and save image_path:[y1 x1 y2 x2] 
+         -> `crops_metadata.json` for all cropped_images
+
 '''
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1000000000 

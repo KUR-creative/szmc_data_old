@@ -1,8 +1,12 @@
 '''
 Script for creation of dataset for Cnet training
 
-input:  json file of cropped image(from image_cutter)
-output: flist file for Cnet training
+python json2flist.py crops_metadata.json dataset_name.flist
+
+`crops_metadata.json`
+    input:  json file of cropped image(from image_cutter)
+`dataset_name.flist`
+    output: flist file for Cnet training
 '''
 import json
 from random import shuffle

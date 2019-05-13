@@ -1,3 +1,17 @@
+HOW TO MAKE DATASET
+
+1. crop and save images & metadata.json
+
+python image_cutter.py crops_metadata.json
+python image_cutter.py crops_metadata.json valid
+python image_cutter.py crops_metadata.json all
+
+2. make flist file from metadata.json
+python json2flist.py crops_metadata.json dataset_name.flist
+
+-----------------------------------------------------------
+DATASET SUMMARY
+
 db_NH_190414.json: [text = Half or Not-easy] img paths and metadata :190414ver
 db_O_190414.json:  [text = nO text]          img paths and metadata :190414ver
 db_fmd_cleans190414.flist:  db_O_190414.json + clean_fmd_comics190415.json and shuffled
