@@ -33,15 +33,15 @@ def inplace_shuffled(li):
 
 fp.pipe(
     # paths -> dicts
-    fp.cmap(json_path2dic),
-    fp.tup(fp.merge),
+    fp.cmap( json_path2dic ),
+    fp.tup( fp.merge ),
     lambda dic: dic.items(),
     # dicts -> shuffled image_paths
-    fp.cmap(lambda path_val: path_val[0]),
-    fp.clmap(lambda path: path + '\n'),
+    fp.cmap( lambda path_val: path_val[0] ),
+    fp.clmap( lambda path: path + '\n' ),
     inplace_shuffled,
     # save
-    write_flist(dst_flist_path)
+    write_flist( dst_flist_path )
 )(src_json_paths)
 
 '''
