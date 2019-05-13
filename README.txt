@@ -1,46 +1,28 @@
- [dataset directory]
+ [gui key 매뉴얼]
+o	nO-text로 기록
+a	All-easy로 기록
+h	Half-easy로 기록
+n	No-easy로 기록
+?	문자가 있는지 없는지 알 수 없음(기본 상태)
+!	hasText: 문자가 존재하나 a/h/n 여부는 알 수 없음
 
-image directory:
-    danbooru_raw
-    snet_data
-    clean_fmd_comics
+f	모드 변경: Full / 원본 높이 / 원본 너비
+j	아래로 크게 스크롤
+k	위로 크게 스크롤
 
-metadatas:
-    dataset
+Enter	이미지에 대한 기록을 확정, 저장하고 다음 이미지로 넘어감.
 
+ 키 맵핑(행의 첫번째 키는 이후 키들과 동일하게 인식됨)
+o	0
+a	1	Space
+h	2
+n	3
 
-!!!!!! CAUTION !!!!!!
-files in dataset are VERY IMPORTANT!
-DO NOT REMOVE THIS!
+!	[
 
- :NOTE:
-for image loading, PIL(Pillow) 6.0.0 needed
-for training gan, use cmd: export LD_LIBRARY_PATH=/opt/cuda/lib64  (pacman bug)
+j	Down
+k	Up
 
-
- <유용한 SQL 명령들>
-
-id 내림차순으로 보기
-SELECT * FROM data ORDER BY CAST(id AS INTEGER) DESC
-
-id 오름차순으로 보기
-SELECT * FROM data ORDER BY CAST(id AS INTEGER)
-
-id로 정렬하여 텍스트가 'O'인 이미지 전부 보기
-SELECT * FROM data WHERE text = 'O' ORDER BY CAST(id AS INT)
-
-텍스트가 'O'인 이미지(행) 개수 세기
-SELECT count(*) FROM data WHERE text = 'O'
-
-텍스트가 'O'이고 
-단부루 메타데이터로 comic이 설정된 이미지들을
-id 순서로 나열하여 보기
-SELECT * 
-FROM data, metadata
-WHERE data.id = metadata.id 
-  and data.text = 'O' 
-  and metadata.comic = 1
-ORDER BY CAST(data.id AS INT)
 
 
  [실행 하는 법]
@@ -82,3 +64,49 @@ gui.py는 현재 작업해야할 이미지의 id를 work_state에 저장한다.
 2. <데이터 보기> 탭으로 돌아와서 테이블(T)에서 work_state를 선택한다.
 3. id_order는 건드리지 말고, now_id에 1.에서 복사한 id를 붙여넣는다
 4. gui.py를 다시 실행한다.
+
+
+ [유용한 SQL 명령들]
+
+id 내림차순으로 보기
+SELECT * FROM data ORDER BY CAST(id AS INTEGER) DESC
+
+id 오름차순으로 보기
+SELECT * FROM data ORDER BY CAST(id AS INTEGER)
+
+id로 정렬하여 텍스트가 'O'인 이미지 전부 보기
+SELECT * FROM data WHERE text = 'O' ORDER BY CAST(id AS INT)
+
+텍스트가 'O'인 이미지(행) 개수 세기
+SELECT count(*) FROM data WHERE text = 'O'
+
+텍스트가 'O'이고 
+단부루 메타데이터로 comic이 설정된 이미지들을
+id 순서로 나열하여 보기
+SELECT * 
+FROM data, metadata
+WHERE data.id = metadata.id 
+  and data.text = 'O' 
+  and metadata.comic = 1
+ORDER BY CAST(data.id AS INT)
+
+ [dataset directory]
+
+image directory:
+    danbooru_raw
+    snet_data
+    clean_fmd_comics
+
+metadatas:
+    dataset
+
+
+!!!!!! CAUTION !!!!!!
+files in dataset are VERY IMPORTANT!
+DO NOT REMOVE THIS!
+
+ :NOTE:
+for image loading, PIL(Pillow) 6.0.0 needed
+for training gan, use cmd: export LD_LIBRARY_PATH=/opt/cuda/lib64  (pacman bug)
+
+
