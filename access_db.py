@@ -153,6 +153,16 @@ class DB:
         ''')
         return pd.DataFrame(cur.fetchall(), columns=['id','file_path'])
 
+    def unparted_raw_img_paths_entire(self):
+        cur = self.db.cursor()
+        cur.execute('''
+            SELECT data.id,image.file_path
+            FROM data, image
+            WHERE data.id = image.id
+            ORDER BY CAST(data.id AS INT)
+        ''')
+        return pd.DataFrame(cur.fetchall(), columns=['id','file_path'])
+
 if __name__ == '__main__':
     '''
     rows = img_pathseq()
@@ -161,7 +171,8 @@ if __name__ == '__main__':
     rows = img_pathseq(incremental=False)
     print(*rows, sep='\n')
     '''
-    with DB('tmp.db') as db:
+    with DB('./szmc.db') as db:
+        print(db.unparted_raw_img_paths_entire())
         print(db.get_work_state())
 
 
