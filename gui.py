@@ -219,7 +219,8 @@ class MainWindow(QMainWindow):
                     self.confirm()
 
             # Selection etc..
-            elif (e.key() == QtCore.Qt.Key_Exclam):
+            elif (e.key() == QtCore.Qt.Key_Exclam or
+                  e.key() == QtCore.Qt.Key_BracketLeft):
                 self.choice_viwer.setStyleSheet(
                     'font:70pt; font-weight:bold; color:green;'
                 )
